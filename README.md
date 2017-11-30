@@ -1,3 +1,7 @@
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vladimirbrasil/time-glimpse)
+[![Build Status](https://travis-ci.org/vladimirbrasil/time-glimpse.svg?branch=master)](https://travis-ci.org/vladimirbrasil/time-glimpse)
+
+
 # \<time-glimpse\>
 
 A glimpse of your time data.
@@ -36,7 +40,7 @@ A glimpse of your time data.
 
 Throw an array of datetimes to get back a glimpse of your data.
 ```html
-<time-analysis datetimes="[[datetimes]]"></time-analysis>
+<time-glimpse datetimes="[[datetimes]]"></time-glimpse>
 ```
 ```js
 const datetimes = ['2017-08-11T14:17', '2017-08-07T16:00','2017-08-23T15:22', '2017-09-13T14:48'];
