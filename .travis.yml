@@ -6,7 +6,7 @@ sudo: false
 group: beta
 
 language: node_js
-node_js:
+node_js: stable
 - node
 addons:
   firefox: latest-esr
@@ -16,14 +16,17 @@ cache:
   - "$HOME/.cache/bower"
 before_install:
 - export TZ=America/Sao_Paulo
-- "if [ -d node_modules ] && [ x$(cat node_modules/.last-node-version 2>/dev/null) != x$(node -e 'console.log(process.version)') ]; then npm rebuild --update-binary && node -e 'console.log(process.version)' > node_modules/.last-node-version; fi"
+# - "if [ -d node_modules ] && [ x$(cat node_modules/.last-node-version 2>/dev/null) != x$(node -e 'console.log(process.version)') ]; then npm rebuild --update-binary && node -e 'console.log(process.version)' > node_modules/.last-node-version; fi"
 before_script:
 - npm install web-component-tester bower
+- "npm install -g bower"
+- "bower install"
+- "npm install -g web-component-tester"
 # - npm install web-component-tester bower polylint
-- $(npm bin)/bower install
+# - $(npm bin)/bower install
 # - $(npm bin)/polylint --no-recursion
 script:
-- xvfb-run $(npm bin)/wct
+- xvfb-run wct
 
 # Coverage steps
 # - npm run coverage
