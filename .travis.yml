@@ -15,6 +15,7 @@ cache:
   - node_modules
   - "$HOME/.cache/bower"
 before_install:
+- export TZ=America/Sao_Paulo
 - "if [ -d node_modules ] && [ x$(cat node_modules/.last-node-version 2>/dev/null) != x$(node -e 'console.log(process.version)') ]; then npm rebuild --update-binary && node -e 'console.log(process.version)' > node_modules/.last-node-version; fi"
 before_script:
 - npm install web-component-tester bower
