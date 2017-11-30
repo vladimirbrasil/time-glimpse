@@ -71,8 +71,29 @@
           ({ data, options } = this.prepareChart(chartRows, chartMainStyles, expanded, fullscreen));
 
           var chart = new google.charts.Scatter(this.$.chart_div);
+
+          // User interaction
+          google.visualization.events.addListener(chart, 'select', () => {
+            // // https://developers.google.com/chart/interactive/docs/basic_interactivity
+            // // https://developers.google.com/chart/interactive/docs/reference#visgetselection
+            // console.log(chartRows)
+            // var selectedItem = chart.getSelection()[0];
+            // if (selectedItem) {
+            //   var value = data.getValue(selectedItem.row, selectedItem.column);
+            //   alert('The user selected ' + value);
+            // }
+          });
+
           chart.draw(data, google.charts.Scatter.convertOptions(options));
         });
+      }
+
+      userInteraction() {
+        var selectedItem = chart.getSelection()[0];
+        if (selectedItem) {
+          var value = data.getValue(selectedItem.row, selectedItem.column);
+          alert('The user selected ' + value);
+        }
       }
 
       prepareChart(chartRows, chartMainStyles, expanded, fullscreen) {
