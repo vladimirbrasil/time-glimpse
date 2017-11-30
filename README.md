@@ -34,7 +34,6 @@ A glimpse of your time data.
   document.getElementById('demoEl').datetimes = datetimes;
 </script>
 ```
--->
 
 **Usage**
 

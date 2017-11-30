@@ -1,17 +1,19 @@
-<link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="../polymer/polymer-element.html">
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-<link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../paper-tabs/paper-tab.html">
 <link rel="import" href="chart-calendar.html">
 <link rel="import" href="chart-scatter.html">
 <link rel="import" href="chart-scatter-controls.html">
 <link rel="import" href="chart-traditionalscatter.html">
 <!-- 
-`<time-glimpse>` plots your dates.
+`<time-glimpse>` builds glimpses of your time data.
 
-`<time-glimpse>` accepts an array of datetimes.
+**Usage**
+
+Throw an array of datetimes to get back a glimpse of your data.
 ```html
 <time-glimpse datetimes="[[datetimes]]"></time-glimpse>
 ```
@@ -19,19 +21,13 @@
 const datetimes = ['2017-08-11T14:17', '2017-08-07T16:00','2017-08-23T15:22', '2017-09-13T14:48'];
 ```
 
-Edit `<time-glimpse>` color using `--time-glimpse-color` style.
-```html
-<style>  
-  time-glimpse { 
-    --time-glimpse-color: green; 
-    --time-glimpse-text-color: grey; 
-  }
-</style>
-```
+Weekdays patterns can be glimpsed at the calendar glimpse: a repeated weekday pattern forms a line.
 
-@element time-glimpse
-@hero hero.svg
-@demo demo/index.html
+Time patterns can be glimpsed at the scatter glimpse: a repeated time pattern approaches a line format.
+
+Frequency patterns can be glimpsed both at the calendar and scatter glimpses: every month, twice a week, mostly random.
+
+Expect more glimpses to be added in the future.
 -->
 
 <dom-module id="time-glimpse">
