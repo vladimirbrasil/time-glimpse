@@ -3,6 +3,7 @@
 
 <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../paper-tabs/paper-tab.html">
 <link rel="import" href="chart-calendar.html">
 <link rel="import" href="chart-scatter.html">
@@ -38,8 +39,9 @@ Expect more glimpses to be added in the future.
         @apply --time-glimpse-mixin;
         --time-glimpse-main-color: var(--dark-primary-color, #4286f4);
         --time-glimpse-light-color: var(--light-primary-color, #d6e5ff);
-        --paper-tab-ink: var(--time-glimpse-light-color, #4286f4);
-        --paper-tabs-selection-bar-color: var(--time-glimpse-main-color, #d6e5ff);
+        --paper-tab-ink: var(--time-glimpse-light-color);
+        --paper-tabs-selection-bar-color: var(--time-glimpse-main-color);
+        --iron-icon-fill-color: var(--time-glimpse-main-color);
       }
 
       /* #timeline {
@@ -63,10 +65,10 @@ Expect more glimpses to be added in the future.
       }
     </style>
 
-<paper-tabs selected="{{selected}}">
-  <paper-tab>Weekdays</paper-tab>
-  <paper-tab>Frequency</paper-tab>
-  <paper-tab>Frequency with mondays</paper-tab>
+<paper-tabs selected="{{selected}}"  scrollable="true">
+  <paper-tab><iron-icon icon="myicons:date-range"></iron-icon></paper-tab>
+  <paper-tab><iron-icon icon="myicons:access-time"></iron-icon></paper-tab>
+  <!-- <paper-tab>Frequency with mondays</paper-tab> -->
 </paper-tabs>
 
 <iron-pages selected="{{selected}}">
@@ -80,13 +82,13 @@ Expect more glimpses to be added in the future.
     chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]">
   </chart-scatter>    
   </div>
-  <div>
+  <!-- <div>
     <chart-scatter-controls expanded="{{expandedTrad}}" fullscreen="{{fullscreen}}"></chart-scatter-controls>
     <chart-traditionalscatter
         expanded="[[expandedTrad]]" fullscreen="[[fullscreen]]"
         chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]">
     </chart-traditionalscatter>        
-  </div>
+  </div> -->
 </iron-pages>
 
     <div id="timeline">
