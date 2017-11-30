@@ -2,9 +2,10 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../paper-tabs/paper-tab.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../paper-tabs/paper-tab.html">
+<link rel="import" href="../l2t-paper-slider/l2t-paper-slider.html">
 <link rel="import" href="chart-calendar.html">
 <link rel="import" href="chart-scatter.html">
 <link rel="import" href="chart-scatter-controls.html">
@@ -35,6 +36,7 @@ Expect more glimpses to be added in the future.
   <template>
     <style>
       :host {
+        height: 550px;
         display: block;
         @apply --time-glimpse-mixin;
         --time-glimpse-main-color: var(--dark-primary-color, #4286f4);
@@ -42,6 +44,11 @@ Expect more glimpses to be added in the future.
         --paper-tab-ink: var(--time-glimpse-light-color);
         --paper-tabs-selection-bar-color: var(--time-glimpse-main-color);
         --iron-icon-fill-color: var(--time-glimpse-main-color);
+
+        --paper-slide-dot: var(--time-glimpse-light-color);
+        --paper-slide-dot-selected: var(--time-glimpse-main-color);
+        --paper-slide-height: 550px;
+
       }
 
       /* #timeline {
@@ -52,6 +59,7 @@ Expect more glimpses to be added in the future.
       } */
 
       #calendar_chart_div, #scatter_chart_div {
+        margin: 0 auto;
         width: 100%;
         /* width: 90%; 
         height: 20%; */
@@ -63,12 +71,39 @@ Expect more glimpses to be added in the future.
           width: 1200px;
         }
       }
+
+      chart-scatter-controls {
+        display: flex;
+        justify-content: center;
+      }
+      paper-tabs {
+        text-align: center;
+      }
     </style>
+
+<!-- <l2t-paper-slider total-slides="2">
+  <paper-slide>
+    <chart-calendar chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]"></chart-calendar>        
+  </paper-slide>
+  <paper-slide>
+    <chart-scatter-controls expanded="{{expanded}}" fullscreen="{{fullscreen}}"></chart-scatter-controls>
+    <chart-scatter 
+      expanded="[[expanded]]" fullscreen="[[fullscreen]]"
+      chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]">
+    </chart-scatter>    
+  </paper-slide>
+  <paper-slide>
+    <chart-scatter-controls expanded="{{expandedTrad}}" fullscreen="{{fullscreen}}"></chart-scatter-controls>
+    <chart-traditionalscatter
+        expanded="[[expandedTrad]]" fullscreen="[[fullscreen]]"
+        chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]">
+    </chart-traditionalscatter>        
+  </paper-slide>
+</l2t-paper-slider> -->
 
 <paper-tabs selected="{{selected}}"  scrollable="true">
   <paper-tab><iron-icon icon="myicons:date-range"></iron-icon></paper-tab>
   <paper-tab><iron-icon icon="myicons:access-time"></iron-icon></paper-tab>
-  <!-- <paper-tab>Frequency with mondays</paper-tab> -->
 </paper-tabs>
 
 <iron-pages selected="{{selected}}">
@@ -76,19 +111,19 @@ Expect more glimpses to be added in the future.
     <chart-calendar chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]"></chart-calendar>        
   </div>
   <div>
-    <chart-scatter-controls expanded="{{expanded}}" fullscreen="{{fullscreen}}"></chart-scatter-controls>
     <chart-scatter 
     expanded="[[expanded]]" fullscreen="[[fullscreen]]"
     chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]">
   </chart-scatter>    
+  <chart-scatter-controls expanded="{{expanded}}" fullscreen="{{fullscreen}}"></chart-scatter-controls>
   </div>
-  <!-- <div>
+  <div>
     <chart-scatter-controls expanded="{{expandedTrad}}" fullscreen="{{fullscreen}}"></chart-scatter-controls>
     <chart-traditionalscatter
         expanded="[[expandedTrad]]" fullscreen="[[fullscreen]]"
         chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]">
     </chart-traditionalscatter>        
-  </div> -->
+  </div>
 </iron-pages>
 
     <div id="timeline">
