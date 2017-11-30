@@ -40,6 +40,11 @@
       }
       static get properties() {
         return {
+          height: {
+            type: Number,
+            value: 550,
+            notify: true,
+          },
           timelineData: {
             type: Array,
           },
@@ -85,7 +90,10 @@
         const calendarWidthAdjustFactor = 0.95;
         const cellSize = Math.round((calendarWidthAdjustFactor * chartWidth - 20.3)/55.8);
         const calendarHeightPerYear = (17.9 * cellSize + 29.9)/2;
-        const calendarHeight = 1.1 * (this.years * calendarHeightPerYear);
+        const calendarHeight = Math.round(1.1 * (this.years * calendarHeightPerYear));
+
+        console.log(calendarHeight);
+        if (calendarHeight > this.height) this.set('height', calendarHeight); //this.updateStyles({'--time-glimpse-height': `${calendarHeight}px`});
         return {cellSize, calendarHeight};
       }
 

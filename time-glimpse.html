@@ -36,7 +36,6 @@ Expect more glimpses to be added in the future.
   <template>
     <style>
       :host {
-        height: 550px;
         display: block;
         @apply --time-glimpse-mixin;
         --time-glimpse-main-color: var(--dark-primary-color, #4286f4);
@@ -49,6 +48,8 @@ Expect more glimpses to be added in the future.
         --paper-slide-dot-selected: var(--time-glimpse-main-color);
         --paper-slide-height: 550px;
 
+        --time-glimpse-height: 550px;
+        height: var(--time-glimpse-height);
       }
 
       /* #timeline {
@@ -108,7 +109,7 @@ Expect more glimpses to be added in the future.
 
 <iron-pages selected="{{selected}}">
   <div>
-    <chart-calendar chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]"></chart-calendar>        
+    <chart-calendar chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]" height="{{calendarHeight}}"></chart-calendar>        
   </div>
   <div>
     <chart-scatter 
@@ -165,6 +166,7 @@ Expect more glimpses to be added in the future.
       static get is() { return 'time-glimpse'; }
       static get observers() {
         return [
+          'observeCalendarHeight(calendarHeight)',
           // 'dataLoaded(timelineData, chartMainStyles)',
           // 'selChanged(selected)',
         ];
@@ -209,6 +211,11 @@ Expect more glimpses to be added in the future.
         // console.log(window.innerWidth);
         this.set('hostWidth', this.offsetWidth);
         console.log(this.hostWidth);
+      }
+
+      observeCalendarHeight(calendarHeight) {
+        console.log(calendarHeight)
+        this.updateStyles({'--time-glimpse-height': `${calendarHeight}px`});
       }
 
       // selChanged(selected) {
