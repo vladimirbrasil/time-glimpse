@@ -1,6 +1,6 @@
 {
   "name": "time-glimpse",
-  "description": "A glimpse into your time data",
+  "description": "A glimpse of your time data",
   "main": "time-glimpse.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",

@@ -1,10 +1,10 @@
 # \<time-glimpse\>
 
-A glimpse into your time data.
+A glimpse of your time data.
 
 **Description**
 
-`<time-glimpse>` builds glimpses into your time data.
+`<time-glimpse>` builds glimpses of your time data.
 
 <!---
 ```
@@ -34,7 +34,7 @@ A glimpse into your time data.
 
 **Usage**
 
-Throw an array of datetimes to get back a glimpse into your data.
+Throw an array of datetimes to get back a glimpse of your data.
 ```html
 <time-analysis datetimes="[[datetimes]]"></time-analysis>
 ```
