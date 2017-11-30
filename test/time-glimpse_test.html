@@ -26,23 +26,41 @@
     </test-fixture>
 
     <script>
-      suite('time-glimpse', () => {
+      describe( 'static', () => {
+        let element;
 
-        test('instantiating the element with default properties works', () => {
-          const element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'time-glimpse');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello time-glimpse!');
+        beforeEach( function() {
+          const datetimes = [
+            '2017-08-11T14:17:00-03:00',
+            '2017-08-07T16:00:00-03:00',
+            '2017-08-23T15:22:00-03:00',
+            '2017-09-01T16:34:00-03:00',
+            '2017-08-17T15:22:00-03:00',
+            '2017-09-21T17:44:00-03:00',
+            '2017-09-13T14:48:00-03:00',
+          ];
+          element = fixture('BasicTestFixture');
+          element.set('datetimes', datetimes);
+        });
+    
+        it( 'pass wrongly formatted data behaves properly', function() {
+          element.set('datetimes', { key: 'value' });
+          expect( element.timelineData,  `datetimes wrongly formatted` ).to.equal  ( undefined );
         });
 
-        test('setting a property on the element works', () => {
-          // Create a test fixture
-          const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+        it( 'instantiating the element with correct data works', function() {
+          expect( element.datetimes[0],  `first datetime` ).to.equal  ( '2017-08-11T14:17:00-03:00' );
+        });
+
+        it( 'timeline data is properly calculated', function() {
+          const firstDate = element.timelineData[0];
+          console.log(firstDate);
+          noTime = firstDate.datetime.toString().split('2017')[0].trim();
+          expect( `${noTime}`,  `firstDate` ).to.equal  ( 'Fri Aug 11' );
+          expect( `${firstDate.weekday}`,  `weekday` ).to.equal  ( 'fri' );
+          expect( `${firstDate.time}`,  `time` ).to.equal  ( '14:17' );
+          expect( `${firstDate.date}`,  `date` ).to.equal  ( '08/11/2017' );
+          expect( `${firstDate.formattedDate}`,  `formattedDate` ).to.equal  ( 'August 11, 2017' );
         });
 
       });
