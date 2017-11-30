@@ -43,8 +43,11 @@ const datetimes = ['2017-08-11T14:17', '2017-08-07T16:00','2017-08-23T15:22', '2
 ```
 
 Weekdays patterns can be glimpsed at the calendar glimpse: a repeated weekday pattern forms a line.
+
 Time patterns can be glimpsed at the scatter glimpse: a repeated time pattern approaches a line format.
+
 Frequency patterns can be glimpsed both at the calendar and scatter glimpses: every month, twice a week, mostly random.
+
 Expect more glimpses to be added in the future.
 
 **Contributing**
