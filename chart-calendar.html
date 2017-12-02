@@ -141,7 +141,8 @@
       }
 
       computeChartRows(chartRowsFull, chartRowsNoOutliers, showOutliers) {
-        if (!chartRowsFull || !chartRowsFull[0] || !chartRowsNoOutliers || !chartRowsNoOutliers[0]) return;
+        // console.log(chartRowsFull, chartRowsFull[0], chartRowsNoOutliers)
+        if (!chartRowsFull || !chartRowsFull[0] || !chartRowsNoOutliers || !chartRowsNoOutliers[0]) return chartRowsFull;
         return showOutliers ? chartRowsFull : chartRowsNoOutliers;
       }
 
@@ -230,6 +231,11 @@
           alert('The user selected ' + value);
         }
       }
+
+      jsonStringify(obj) {
+        return JSON.stringify(obj, null, 2);
+      }
+
 
     }
 
