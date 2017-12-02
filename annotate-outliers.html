@@ -39,8 +39,8 @@
 
       annotateOutliers(timelineData) {
         if (!timelineData || !timelineData[0]) return;
-        if (timelineData.length <= this.minimumSampleSize) return; //http://www.mickybullock.com/blog/2013/10/statistical-outliers-impossible-in-small-samples/
         this.set('noOutliers', true);
+        if (timelineData.length <= this.minimumSampleSize) return; //http://www.mickybullock.com/blog/2013/10/statistical-outliers-impossible-in-small-samples/
         this.annotateTimeOutliers(timelineData);
         this.annotateDateOutliers(timelineData);
         // console.log(timelineData);
