@@ -1,0 +1,94 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="report-el">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+  </template>
+
+  <script>
+    class ReportEl extends Polymer.Element {
+      static get is() { return 'report-el'; }
+      static get observers() {
+        return [
+        ];
+      }
+      static get properties() {
+        return {
+          timelineData: {
+            type: Array,
+            value: [],
+          },
+          report: {
+            type: Object,
+            computed: 'createReport(timelineData)',
+            notify: true,
+          },
+        };
+      }
+
+      createReport(timelineData) {
+        if (!timelineData || !timelineData[0]) return {};
+        return {
+          allData: {
+            time: {
+              min: null,
+              max: null,
+              avg: null,
+            },
+            date: {
+              min: null,
+              max: null,
+              avg: null,
+            },
+            interval: {
+              min: null,
+              max: null,
+              avg: null,
+            },
+            weekday: {
+              frequent: [],
+              rare: [],
+            },
+          },
+          commonData: {
+            time: {
+              min: null,
+              max: null,
+              avg: null,
+            },
+            date: {
+              min: null,
+              max: null,
+              avg: null,
+            },
+            interval: {
+              min: null,
+              max: null,
+              avg: null,
+            },
+            weekday: {
+              frequent: [],
+              rare: [],
+            },
+          },
+        };
+      }
+
+      _sortDates(a, b) {
+        return new Date(a) - new Date(b);
+      }
+
+      jsonStringify(obj) {
+        return JSON.stringify(obj, null, 2);
+      }
+
+    }
+
+    window.customElements.define(ReportEl.is, ReportEl);
+  </script>
+</dom-module>

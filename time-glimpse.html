@@ -6,6 +6,8 @@
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../l2t-paper-slider/l2t-paper-slider.html">
+
+<link rel="import" href="report-el.html">
 <link rel="import" href="chart-calendar.html">
 <link rel="import" href="chart-scatter.html">
 <link rel="import" href="chart-scatter-controls.html">
@@ -102,6 +104,8 @@ Expect more glimpses to be added in the future.
   </paper-slide>
 </l2t-paper-slider> -->
 
+<report-el timeline-data="[[timelineData]]" report="{{report}}"></report-el>
+
 <paper-tabs selected="{{selected}}"  scrollable="true">
   <paper-tab><iron-icon icon="myicons:date-range"></iron-icon></paper-tab>
   <paper-tab><iron-icon icon="myicons:access-time"></iron-icon></paper-tab>
@@ -187,6 +191,9 @@ Expect more glimpses to be added in the future.
           timelineData: {
             type: Array,
             computed: 'computeTimelineData(datetimes)',
+          },          
+          report: {
+            type: Object,
           },          
           hostWidth: {
             type: Number,
