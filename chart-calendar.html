@@ -1,3 +1,11 @@
+<!-- 
+  Think about refactor this code as follows.
+  chart-scatter and chart-calendar (and other charts)
+  share some important common functions and format.
+  Inheritance or mixin could in someway 
+  simplify the actual specialization charts
+-->
+
 <link rel="import" href="../polymer/polymer-element.html">
 <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
 
@@ -35,11 +43,16 @@
       static get is() { return 'chart-calendar'; }
       static get observers() {
         return [
-          'dataLoaded(chartRows, chartMainStyles)'
+          'prepareChart(chart, chartRows, chartMainStyles)',
+          // 'dataLoaded(chartRows, chartMainStyles)'
         ];
       }
       static get properties() {
         return {
+          showOutliers: {
+            type: Boolean,
+            value: true,
+          },
           height: {
             type: Number,
             value: 550,
@@ -51,15 +64,85 @@
           chartMainStyles: {
             type: Object,
           },
+          chart: {
+            type: Object,
+            value: null,
+          },
           chartRows: {
             type: Array,
-            computed: 'computeChartRows(timelineData)',
+            computed: 'computeChartRows(chartRowsFull, chartRowsNoOutliers, showOutliers)',
+          },
+          chartRowsFull: {
+            type: Array,
+            computed: 'computeChartRowsFull(timelineData)',
+          },
+          chartRowsNoOutliers: {
+            type: Array,
+            computed: 'computeChartRowsNoOutliers(timelineData)',
           },
           years: {
             type: Number,
             computed: 'computeYears(timelineData)',
           },
         };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        google.charts.load('current', {
+          'language': document.documentElement.lang || 'en',
+          'packages': ['calendar'], 
+        });
+        
+        google.charts.setOnLoadCallback(() => {
+          const chart = new google.visualization.Calendar(this.$.chart_div);
+          this.set('chart', chart);
+
+          // User interaction
+          google.visualization.events.addListener(chart, 'select', () => {
+            // // https://developers.google.com/chart/interactive/docs/basic_interactivity
+            // // https://developers.google.com/chart/interactive/docs/reference#visgetselection
+            // console.log(chartRows)
+            // var selectedItem = chart.getSelection()[0];
+            // if (selectedItem) {
+            //   var value = data.getValue(selectedItem.row, selectedItem.column);
+            //   alert('The user selected ' + value);
+            // }
+          });
+
+        });
+      }
+
+      computeChartRowsFull(timelineData) {
+        if (!timelineData || !timelineData[0]) return;
+        // console.log(timelineData);
+        
+        return timelineData
+        .map((tdata, index) => [ 
+          new Date(tdata.datetime), 
+          tdata.timeVal,
+          `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
+        ]);
+      }
+
+      computeChartRowsNoOutliers(timelineData) {
+        if (!timelineData || !timelineData[0]) return;
+
+        
+         return timelineData
+        .filter(td => !td.isOutlier)
+        // .filter(td => !td.dateValIsOutlier)
+        .map((tdata, index) => [ 
+          new Date(tdata.datetime), 
+          tdata.timeVal,
+          `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
+        ]);
+      }
+
+      computeChartRows(chartRowsFull, chartRowsNoOutliers, showOutliers) {
+        if (!chartRowsFull || !chartRowsFull[0] || !chartRowsNoOutliers || !chartRowsNoOutliers[0]) return;
+        return showOutliers ? chartRowsFull : chartRowsNoOutliers;
       }
 
       computeYears(timelineData) {
@@ -69,38 +152,14 @@
         const firstYear = Math.min(...years);
         const lastYear = Math.max(...years);
         // console.log(lastYear - firstYear);
+        
+
         return 1 + lastYear - firstYear;
       }
 
-      dataLoaded(chartRows, chartMainStyles) {
-        if (!chartRows || !chartRows[0] || !chartMainStyles) return
-
-        google.charts.load('current', {
-          'language': document.documentElement.lang || 'en',
-          'packages': ['calendar'], 
-        });
-        google.charts.setOnLoadCallback(() => {
-
-          let data, options;
-
-          ({ data, options } = this.prepareChart(chartRows, chartMainStyles));
-          var chart = new google.visualization.Calendar(this.$.chart_div);
-          chart.draw(data, options);        
-        });
-      }
-
-      computeChartDimensions(chartWidth) {
-        const calendarWidthAdjustFactor = 0.95;
-        const cellSize = Math.round((calendarWidthAdjustFactor * chartWidth - 20.3)/55.8);
-        const calendarHeightPerYear = (17.9 * cellSize + 29.9)/2;
-        const calendarHeight = Math.round(1.1 * (this.years * calendarHeightPerYear));
-
-        console.log(calendarHeight);
-        if (calendarHeight > this.height) this.set('height', calendarHeight); //this.updateStyles({'--time-glimpse-height': `${calendarHeight}px`});
-        return {cellSize, calendarHeight};
-      }
-
-      prepareChart(chartRows, chartMainStyles) {
+      prepareChart(chart, chartRows, chartMainStyles) {
+        if (!chart || !chartRows || !chartRows[0] || !chartMainStyles) return
+        // console.log(chartRows)
         // https://developers.google.com/chart/interactive/docs/gallery/calendar
         let data = new google.visualization.DataTable();
         data.addColumn({ type: 'date', id: 'Date' });
@@ -145,24 +204,31 @@
           }          
         };
         // console.log(this.chartMainStyles)
-        // console.log(data, options)
-        return { data, options };
+        // console.log(data, options)      
+          
+        chart.draw(data, options);        
+          
       }
 
-      computeChartRows(timelineData) {
-        if (!timelineData || !timelineData[0]) return;
-        const rows = this.timelineData
-        .map((tdata, index) => [ 
-          new Date(tdata.datetime), 
-          tdata.timeVal,
-          `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
-        ]);
-        // console.log(JSON.stringify(rows));
-        return rows;
+      computeChartDimensions(chartWidth) {
+        const calendarWidthAdjustFactor = 0.95;
+        const cellSize = Math.round((calendarWidthAdjustFactor * chartWidth - 20.3)/55.8);
+        const calendarHeightPerYear = (17.9 * cellSize + 29.9)/2;
+        const calendarHeight = Math.round(1.1 * (this.years * calendarHeightPerYear));
+
+        // console.log(calendarHeight);
+        if (calendarHeight > this.height) this.set('height', calendarHeight); //this.updateStyles({'--time-glimpse-height': `${calendarHeight}px`});
+        
+
+        return {cellSize, calendarHeight};
       }
 
-      _getTime(date) {
-        return date.toLocaleString('pt-BR').substring(11,16).trim();
+      userInteraction() {
+        var selectedItem = chart.getSelection()[0];
+        if (selectedItem) {
+          var value = data.getValue(selectedItem.row, selectedItem.column);
+          alert('The user selected ' + value);
+        }
       }
 
     }

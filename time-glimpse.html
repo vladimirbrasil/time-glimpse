@@ -3,6 +3,7 @@
 
 <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../paper-tabs/paper-tab.html">
+<link rel="import" href="../paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../l2t-paper-slider/l2t-paper-slider.html">
@@ -108,6 +109,9 @@ Expect more glimpses to be added in the future.
     <report-el timeline-data="[[timelineData]]" report="{{report}}"></report-el>
     <annotate-outliers timeline-data="{{timelineData}}"></annotate-outliers>
 
+    <paper-toggle-button checked="{{showOutliers}}">Outliers</paper-toggle-button>
+    
+
     <paper-tabs selected="{{selected}}"  scrollable="true">
       <paper-tab><iron-icon icon="myicons:date-range"></iron-icon></paper-tab>
       <paper-tab><iron-icon icon="myicons:access-time"></iron-icon></paper-tab>
@@ -115,10 +119,13 @@ Expect more glimpses to be added in the future.
 
     <iron-pages selected="{{selected}}">
       <div>
-        <chart-calendar chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]" height="{{calendarHeight}}"></chart-calendar>        
+        <chart-calendar 
+        show-outliers="[[showOutliers]]"
+        chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]" height="{{calendarHeight}}"></chart-calendar>        
       </div>
       <div>
-        <chart-scatter 
+        <chart-scatter
+        show-outliers="[[showOutliers]]"
         expanded="[[expanded]]" fullscreen="[[fullscreen]]"
         chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]">
       </chart-scatter>    
@@ -157,9 +164,9 @@ Expect more glimpses to be added in the future.
             type: Number,
             value: 0,
           },
-          filterOutliers: {
+          showOutliers: {
             type: Boolean,
-            value: false,
+            value: true,
           },
 
           /**
@@ -171,7 +178,7 @@ Expect more glimpses to be added in the future.
           },
           timelineData: {
             type: Array,
-            computed: 'computeTimelineData(datetimes, filterOutliers)',
+            computed: 'computeTimelineData(datetimes)',
           },          
           report: {
             type: Object,
@@ -216,7 +223,7 @@ Expect more glimpses to be added in the future.
         return { chartWidth, dataColor, lightColor };
       }
 
-      computeTimelineData(datetimes, filterOutliers) {
+      computeTimelineData(datetimes) {
         if (!datetimes || !datetimes[0]) return;
         const timelineData = datetimes
           .map(dt => this._toDateTime(dt))
@@ -294,7 +301,7 @@ Expect more glimpses to be added in the future.
         return textDateFormat.format(date);
       }
 
-      // function filterOutliers(someArray) {
+      // function showOutliers(someArray) {
 
       //   if(someArray.length < 4)
       //     return someArray;

@@ -1,3 +1,11 @@
+<!-- 
+  Think about refactor this code as follows.
+  chart-scatter and chart-calendar (and other charts)
+  share some important common functions and format.
+  Inheritance or mixin could in someway 
+  simplify the actual specialization charts
+-->
+
 <link rel="import" href="../polymer/polymer-element.html">
 <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
 
@@ -35,11 +43,16 @@
       static get is() { return 'chart-scatter'; }
       static get observers() {
         return [
-          'dataLoaded(chartRows, chartMainStyles, expanded, fullscreen)',
+          'prepareChart(chart, chartRows, chartMainStyles, expanded, fullscreen)',
+          // 'dataLoaded(chartRows, chartMainStyles, expanded, fullscreen)',
         ];
       }
       static get properties() {
         return {
+          showOutliers: {
+            type: Boolean,
+            value: true,
+          },
           expanded: {
             type: Boolean,
             value: false,
@@ -54,26 +67,36 @@
           chartMainStyles: {
             type: Object,
           },
+          chart: {
+            type: Object,
+            value: null,
+          },
           chartRows: {
             type: Array,
-            computed: 'computeChartRows(timelineData)',
+            computed: 'computeChartRows(chartRowsFull, chartRowsNoOutliers, showOutliers)',
+          },
+          chartRowsFull: {
+            type: Array,
+            computed: 'computeChartRowsFull(timelineData)',
+          },
+          chartRowsNoOutliers: {
+            type: Array,
+            computed: 'computeChartRowsNoOutliers(timelineData)',
           },
         };
       }
 
-      dataLoaded(chartRows, chartMainStyles, expanded, fullscreen) {
-        if (!chartRows || !chartRows[0] || !chartMainStyles) return
+      connectedCallback() {
+        super.connectedCallback();
 
         google.charts.load('current', {
           'language': document.documentElement.lang || 'en',
           'packages': ['scatter'], 
         });
+        
         google.charts.setOnLoadCallback(() => {
-
-          let data, options;
-          ({ data, options } = this.prepareChart(chartRows, chartMainStyles, expanded, fullscreen));
-
-          var chart = new google.charts.Scatter(this.$.chart_div);
+          const chart = new google.charts.Scatter(this.$.chart_div);
+          this.set('chart', chart);
 
           // User interaction
           google.visualization.events.addListener(chart, 'select', () => {
@@ -87,19 +110,72 @@
             // }
           });
 
-          chart.draw(data, google.charts.Scatter.convertOptions(options));
         });
       }
 
-      userInteraction() {
-        var selectedItem = chart.getSelection()[0];
-        if (selectedItem) {
-          var value = data.getValue(selectedItem.row, selectedItem.column);
-          alert('The user selected ' + value);
-        }
+      computeChartRowsFull(timelineData) {
+        if (!timelineData || !timelineData[0]) return;
+        // console.log(timelineData);
+
+        return timelineData
+        .map((tdata, index) => [ 
+            tdata.datetime, 
+            this._timeOfDay(tdata.datetime)
+            // `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
+          ]);
       }
 
-      prepareChart(chartRows, chartMainStyles, expanded, fullscreen) {
+      computeChartRowsNoOutliers(timelineData) {
+        if (!timelineData || !timelineData[0]) return;
+
+         return timelineData
+          .filter(td => !td.isOutlier)
+          // .filter(td => !td.timeValIsOutlier)
+          .map((tdata, index) => [ 
+            tdata.datetime, 
+            this._timeOfDay(tdata.datetime)
+            // `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
+          ]);
+      }
+
+      computeChartRows(chartRowsFull, chartRowsNoOutliers, showOutliers) {
+        if (!chartRowsFull || !chartRowsFull[0] || !chartRowsNoOutliers || !chartRowsNoOutliers[0]) return;
+        return showOutliers ? chartRowsFull : chartRowsNoOutliers;
+      }
+
+      // dataLoaded(chartRows, chartMainStyles, expanded, fullscreen) {
+      //   if (!chartRows || !chartRows[0] || !chartMainStyles) return
+
+      //   google.charts.load('current', {
+      //     'language': document.documentElement.lang || 'en',
+      //     'packages': ['scatter'], 
+      //   });
+      //   google.charts.setOnLoadCallback(() => {
+
+      //     let data, options;
+      //     ({ data, options } = this.prepareChart(chartRows, chartMainStyles, expanded, fullscreen));
+
+      //     var chart = new google.charts.Scatter(this.$.chart_div);
+
+      //     // User interaction
+      //     google.visualization.events.addListener(chart, 'select', () => {
+      //       // // https://developers.google.com/chart/interactive/docs/basic_interactivity
+      //       // // https://developers.google.com/chart/interactive/docs/reference#visgetselection
+      //       // console.log(chartRows)
+      //       // var selectedItem = chart.getSelection()[0];
+      //       // if (selectedItem) {
+      //       //   var value = data.getValue(selectedItem.row, selectedItem.column);
+      //       //   alert('The user selected ' + value);
+      //       // }
+      //     });
+
+      //     chart.draw(data, chart.convertOptions(options));
+      //   });
+      // }
+
+      prepareChart(chart, chartRows, chartMainStyles, expanded, fullscreen) {
+        if (!chart || !chartRows || !chartRows[0] || !chartMainStyles) return
+      // prepareChart(chartRows, chartMainStyles, expanded, fullscreen) {
         // https://developers.google.com/chart/interactive/docs/gallery/scatterchart
         let data = new google.visualization.DataTable();
         data.addColumn({ type: 'date', id: 'Date' });
@@ -136,26 +212,7 @@
         // console.log(rows);
         data.addRows(rows);
 
-
-        return { data, options };
-      }
-
-
-      computeChartRows(timelineData) {
-        if (!timelineData || !timelineData[0]) return;
-        const rows = this.timelineData
-          .map((tdata, index) => [ 
-            tdata.datetime, 
-            this._timeOfDay(tdata.datetime)
-            // `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
-          ]);
-
-        // console.log(JSON.stringify(rows));
-        return rows;
-      }
-
-      _getTime(date) {
-        return date.toLocaleString('pt-BR').substring(11,16).trim();
+        chart.draw(data, google.charts.Scatter.convertOptions(options));
       }
 
       _timeOfDay(datetime) {
@@ -176,6 +233,18 @@
           const d = new Date(datetime);
           const timezone = d.getTimezoneOffset();
           return new Date(d.getTime() + timezone * 60 * 1000);
+        }
+      }
+
+      _getTime(date) {
+        return date.toLocaleString('pt-BR').substring(11,16).trim();
+      }
+
+      userInteraction() {
+        var selectedItem = chart.getSelection()[0];
+        if (selectedItem) {
+          var value = data.getValue(selectedItem.row, selectedItem.column);
+          alert('The user selected ' + value);
         }
       }
 

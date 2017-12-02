@@ -10,7 +10,8 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.1",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.1.0",
     "iron-icon": "PolymerElements/iron-icon#^2.0.1",
-    "l2t-paper-slider": "Link2Twenty/l2t-paper-slider#^2.0.0"
+    "l2t-paper-slider": "Link2Twenty/l2t-paper-slider#^2.0.0",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.0.0"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
