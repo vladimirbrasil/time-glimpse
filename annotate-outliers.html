@@ -25,11 +25,17 @@
             value: [],
             notify: true,
           },
+          noOutliers: {
+            type: Boolean,
+            value: true,
+            notify: true,
+          },
         };
       }
 
       annotateOutliers(timelineData) {
         if (!timelineData || !timelineData[0]) return;
+        this.set('noOutliers', true);
         this.annotateTimeOutliers(timelineData);
         this.annotateDateOutliers(timelineData);
         // console.log(timelineData);
@@ -53,6 +59,7 @@
           if (referenceArrayWithoutOutliers.indexOf(td[ propertyNameToEvaluate ]) === -1) {
             td[ propertyNameToAnnotate ] = true;
             td.isOutlier = true;
+            if (this.noOutliers) this.set('noOutliers', false);
           }
         });
 

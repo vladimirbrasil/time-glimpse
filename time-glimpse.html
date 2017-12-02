@@ -84,6 +84,14 @@ Expect more glimpses to be added in the future.
       paper-tabs {
         text-align: center;
       }
+
+      .outliers {
+        text-decoration: none;
+        text-transform: lowercase;
+      }
+      .outliers.none {
+        text-decoration: line-through;
+      }
     </style>
 
     <!-- <l2t-paper-slider total-slides="2">
@@ -107,9 +115,13 @@ Expect more glimpses to be added in the future.
     </l2t-paper-slider> -->
 
     <report-el timeline-data="[[timelineData]]" report="{{report}}"></report-el>
-    <annotate-outliers timeline-data="{{timelineData}}"></annotate-outliers>
+    <annotate-outliers timeline-data="{{timelineData}}" no-outliers={{noOutliers}}></annotate-outliers>
 
-    <paper-toggle-button checked="{{showOutliers}}">Outliers</paper-toggle-button>
+    <template is="dom-if" if="[[!noOutliers]]">
+      <paper-toggle-button checked="{{showOutliers}}" disabled="[[noOutliers]]">
+        <span class$="[[computeOutliersToggleClass(showOutliers)]]">Outliers</span>
+      </paper-toggle-button>
+    </template>
     
 
     <paper-tabs selected="{{selected}}"  scrollable="true">
@@ -330,6 +342,9 @@ Expect more glimpses to be added in the future.
         return JSON.stringify(obj, null, 2);
       }
 
+      computeOutliersToggleClass(showOutliers) {
+        return showOutliers ? 'outliers' : 'outliers none';
+      }
 
     }
 
