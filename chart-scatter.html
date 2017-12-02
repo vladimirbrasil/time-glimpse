@@ -64,7 +64,10 @@
       dataLoaded(chartRows, chartMainStyles, expanded, fullscreen) {
         if (!chartRows || !chartRows[0] || !chartMainStyles) return
 
-        google.charts.load('current', {'packages':['scatter']});
+        google.charts.load('current', {
+          'language': document.documentElement.lang || 'en',
+          'packages': ['scatter'], 
+        });
         google.charts.setOnLoadCallback(() => {
 
           let data, options;

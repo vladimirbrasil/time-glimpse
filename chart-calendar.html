@@ -75,7 +75,10 @@
       dataLoaded(chartRows, chartMainStyles) {
         if (!chartRows || !chartRows[0] || !chartMainStyles) return
 
-        google.charts.load('current', {'packages':['calendar']});
+        google.charts.load('current', {
+          'language': document.documentElement.lang || 'en',
+          'packages': ['calendar'], 
+        });
         google.charts.setOnLoadCallback(() => {
 
           let data, options;
@@ -151,7 +154,7 @@
         const rows = this.timelineData
         .map((tdata, index) => [ 
           new Date(tdata.datetime), 
-          this._timeToNumberScale(tdata.time),
+          tdata.timeVal,
           `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
         ]);
         // console.log(JSON.stringify(rows));
@@ -160,14 +163,6 @@
 
       _getTime(date) {
         return date.toLocaleString('pt-BR').substring(11,16).trim();
-      }
-
-      _timeToNumberScale(time) {
-        var hoursMinutes = time.split(/[.:]/);
-        var hours = parseInt(hoursMinutes[0], 10);
-        var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
-        // return parseFloat(`${hours}.${minutes}`);        
-        return hours + minutes / 60;        
       }
 
     }
