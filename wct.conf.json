@@ -2,7 +2,6 @@
   "plugins": {
     "sauce": {
       "disabled": true,
-      // "browsers": ["chrome", "firefox"]
       "browsers": [{
           "browserName": "microsoftedge",
           "platform": "Windows 10",
