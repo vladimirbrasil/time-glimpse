@@ -59,6 +59,19 @@ Frequency patterns can be glimpsed both at the calendar and scatter glimpses: ev
 
 Expect more glimpses to be added in the future.
 
+**Testing**
+
+*Browsers*
+
+On december 3<sup>rd</sup>, 2017
+
+| Passing       | Not passing   |
+|:------------- |:--------------|
+| Safari      	| Edge 			|
+| Chrome      	| IE      		|
+| Firefox 		|       		|
+
+
 **Contributing**
 
 1. Fork it!
