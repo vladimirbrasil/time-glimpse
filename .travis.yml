@@ -13,9 +13,9 @@ addons:
 before_install:
 - export TZ=America/Sao_Paulo
 before_script:
-- npm install -g bower polylint web-component-tester
+- npm install -g bower polymer-cli web-component-tester
 - bower install
-# - polymer lint
+- polymer lint
 script:
 - xvfb-run wct --skip-plugin sauce
 - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct --skip-plugin local -s 'default';
