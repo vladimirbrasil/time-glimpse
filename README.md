@@ -10,6 +10,12 @@ A glimpse of your time data.
 
 `<time-glimpse>` builds glimpses of your time data.
 
+`<time-glimpse>` tries to build meaningful views on date and time data arrays. 
+
+Date and time are everywhere. Several data have date and time information. Is it a bad at all idea to be able to receive this date and time data array and serve meaningful views of these information?For instance, is there a more frequent weekday? Or a more frequent time? What is the frequency of the events, by the way? Are there outliers (dates and times far away from the most of the other dates and times)? 
+
+That's what `<time-glimpse>` tries to enlighten, eventhough without being a super-star math expert.
+
 <!---
 ```
 <custom-element-demo>
