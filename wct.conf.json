@@ -4,7 +4,7 @@
       "browsers": ["chrome", "firefox"]
     },
     "sauce": {
-      "disabled": true,
+      "disabled": false,
       "browsers": [{
           "browserName": "MicrosoftEdge",
           "platform": "Windows 10",
