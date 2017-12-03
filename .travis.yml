@@ -1,39 +1,19 @@
-# https://medium.com/collaborne-engineering/how-to-build-polymer-components-with-github-and-travis-67683ef8bf0d
-# https://github.com/Collaborne/d3-progress-meter/blob/master/.travis.yml
-
-dist: trusty
-sudo: false
-group: beta
-
 language: node_js
 node_js: stable
-- node
+dist: trusty
+sudo: required
 addons:
-  firefox: latest-esr
-cache:
-  directories:
-  - node_modules
-  - "$HOME/.cache/bower"
-before_install:
-- export TZ=America/Sao_Paulo
-# - "if [ -d node_modules ] && [ x$(cat node_modules/.last-node-version 2>/dev/null) != x$(node -e 'console.log(process.version)') ]; then npm rebuild --update-binary && node -e 'console.log(process.version)' > node_modules/.last-node-version; fi"
+  firefox: latest
+  sauce_connect: true
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
 before_script:
-- npm install web-component-tester bower
-- "npm install -g bower"
-- "bower install"
-- "npm install -g web-component-tester"
-# - npm install web-component-tester bower polylint
-# - $(npm bin)/bower install
-# - $(npm bin)/polylint --no-recursion
+- npm install -g bower polylint web-component-tester
+- bower install
+- polylint
 script:
 - xvfb-run wct
-
-# Coverage steps
-# - npm run coverage
-# after_success: 'npm run coveralls'
-  # Last travis error
-  # node node_modules/.bin/istanbul cover _mocha -- -R spec
-  # No test files found
-  # No coverage information was collected, exit without writing coverage information
-  # Coverage  https://www.gregjs.com/javascript/2016/how-to-get-a-shiny-coverage-badge-for-your-github-project/
-  #           https://github.com/rcosnita/polymer-karma-example
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct -s 'default'; fi
