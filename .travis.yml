@@ -4,7 +4,6 @@ dist: trusty
 sudo: required
 addons:
   firefox: latest
-  sauce_connect: true
   apt:
     sources:
     - google-chrome
@@ -14,6 +13,4 @@ before_script:
 - npm install -g bower polylint web-component-tester
 - bower install
 - polylint
-script:
-- xvfb-run wct
-- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct -s 'default'; fi
+script: xvfb-run wct
