@@ -202,6 +202,10 @@ Expect more glimpses to be added in the future.
             type: Object,
             computed: 'computeChartMainStyles(hostWidth)',
           },
+
+          calendarHeight: {
+            type: Number,            
+          },
         };
       }
 
@@ -246,11 +250,15 @@ Expect more glimpses to be added in the future.
             return {
               datetime: dt,
               weekday: this._getWeekDay(dt),
-              time: time,
-              timeVal: this._timeToNumberScale(time),
+              time: {
+                str: time,
+                val: this._timeToNumberScale(time),
+              },
+              date: {
+                str: date,
+                val: this._dateToNumberScale(date),
+              },
               formattedDate: this._formattedDate(dt),
-              date: date,
-              dateVal: this._dateToNumberScale(date)
             }
           });
 

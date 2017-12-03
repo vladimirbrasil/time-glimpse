@@ -47,23 +47,22 @@
       }
 
       annotateTimeOutliers(timelineData) {
-        this.annotateReferenceOutliers(timelineData, 'timeVal');
+        this.annotateReferenceOutliers(timelineData, 'time');
       }
       annotateDateOutliers(timelineData) {
-        this.annotateReferenceOutliers(timelineData, 'dateVal');
+        this.annotateReferenceOutliers(timelineData, 'date');
       }
 
-      annotateReferenceOutliers(timelineData, propertyNameToEvaluate) {
-        const referenceArray = timelineData.map((td) => td[ propertyNameToEvaluate ]);
+      annotateReferenceOutliers(timelineData, timeOrDate ) {
+        const referenceArray = timelineData.map((td) => td[ timeOrDate ].val);
         const referenceArrayWithoutOutliers = this.filterOutliers(referenceArray);
         // console.log(referenceArray);
         // console.log(referenceArrayWithoutOutliers);
 
-        const propertyNameToAnnotate = `${propertyNameToEvaluate}IsOutlier`
+        const propertyNameToAnnotate = `${timeOrDate }IsOutlier`
         timelineData.forEach((td) => {
-          if (referenceArrayWithoutOutliers.indexOf(td[ propertyNameToEvaluate ]) === -1) {
-            td[ propertyNameToAnnotate ] = true;
-            td.isOutlier = true;
+          if (referenceArrayWithoutOutliers.indexOf(td[ timeOrDate ].val) === -1) {
+            td.isOutlier = timeOrDate;
             if (this.noOutliers) this.set('noOutliers', false);
           }
         });
@@ -72,10 +71,10 @@
       }
 
       getTimesArray(timelineData) {
-        return timelineData.map((td) => td.timeVal);
+        return timelineData.map((td) => td.time.val);
       }
       getDatesArray(timelineData) {
-        return timelineData.map((td) => td.dateVal);
+        return timelineData.map((td) => td.date.val);
       }
 
       filterOutliers(someArray) {  

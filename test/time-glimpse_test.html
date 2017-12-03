@@ -67,15 +67,17 @@
         });
 
         it( 'datetime is correctly passed', () => {
-          // console.log(firstDate);
+          // console.log(JSON.stringify(firstDate));
           const noTimeDate = firstDate.datetime.toString().split('2017')[0].trim();
           expect( `${noTimeDate}`,  `firstDate` ).to.equal  ( 'Fri Aug 11' );
         });
 
-        it( 'weekday is properly calculated', () => expect( `${firstDate.weekday}` )      .to.equal  ( 'fri'              ) );
-        it( 'time is properly calculated',    () => expect( `${firstDate.time}` )         .to.equal  ( '14:17'            ) );
-        it( 'date is properly calculated',    () => expect( `${firstDate.date}` )         .to.equal  ( '08/11/2017'       ) );
-        it( 'formatted date is calculated',   () => expect( `${firstDate.formattedDate}` ).to.equal  ( 'August 11, 2017'  ) );
+        it( 'weekday is properly calculated',     () => expect( `${firstDate.weekday}`      ).to.equal  ( 'fri'                 ) );
+        it( 'time string is properly calculated', () => expect( `${firstDate.time.str}`     ).to.equal  ( '14:17'               ) );
+        it( 'time value is properly calculated',  () => expect( `${firstDate.time.val}`     ).to.equal  ( '14.283333333333333'  ) );
+        it( 'date string is properly calculated', () => expect( `${firstDate.date.str}`     ).to.equal  ( '08/11/2017'          ) );
+        it( 'date value is properly calculated',  () => expect( `${firstDate.date.val}`     ).to.equal  ( '24212.916666666668'  ) );
+        it( 'formatted date is calculated',       () => expect( `${firstDate.formattedDate}`).to.equal  ( 'August 11, 2017'     ) );
 
       });
 
@@ -105,24 +107,11 @@
           expectedDateOutlier = td[0]; 
           expectedTimeOutlier = td[1];
         });
-        
-        it( 'date outlier is annotated as generic outlier', () => {
-          expect( expectedDateOutlier.isOutlier,  `date outlier is annotated as generic outlier` ).to.equal  ( true );
-        });
 
-        it( 'date outlier is annotated specifically as date outlier', () => {
-          expect( expectedDateOutlier.dateValIsOutlier,  `date outlier is annotated specifically as date outlier` ).to.equal  ( true );
-        });
+        it( 'date outliers are annotated', () => expect( expectedDateOutlier.isOutlier ).to.equal  ( 'date' ) );
+        it( 'time outliers are annotated', () => expect( expectedTimeOutlier.isOutlier ).to.equal  ( 'time' ) );
 
-        it( 'time outlier is annotated as generic outlier', () => {
-          expect( expectedTimeOutlier.isOutlier,  `time outlier is annotated as generic outlier` ).to.equal  ( true );
-        });
-
-        it( 'time outlier is annotated specifically as time outlier', () => {
-          expect( expectedTimeOutlier.timeValIsOutlier,  `time outlier is annotated specifically as time outlier` ).to.equal  ( true );
-        });
-
-        it( 'no outliers in small datasets', () => {
+        it( 'should ignore outliers in small datasets', () => {
           const datetimes = [ 
             "2016-02-11T02:00:00.000Z", 
             "2017-03-11T19:48:59.000Z", 
