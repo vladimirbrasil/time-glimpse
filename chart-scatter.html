@@ -121,7 +121,7 @@
         .map((tdata, index) => [ 
             tdata.datetime, 
             this._timeOfDay(tdata.datetime)
-            // `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
+            // `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time.str}`
           ]);
       }
 
@@ -130,11 +130,11 @@
 
          return timelineData
           .filter(td => !td.isOutlier)
-          // .filter(td => !td.timeValIsOutlier)
+          // .filter(td => !td.time.valIsOutlier)
           .map((tdata, index) => [ 
             tdata.datetime, 
             this._timeOfDay(tdata.datetime)
-            // `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
+            // `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time.str}`
           ]);
       }
 

@@ -4,7 +4,7 @@
 
 ### Browsers
 
-On december 3<sup>rd</sup>, 2017
+On december 3<sup>rd</sup>, 2017.
 
 | Passing       | Not passing   |
 |:------------- |:--------------|
@@ -37,6 +37,7 @@ After each push, watch test results at [travis](https://travis-ci.org/vladimirbr
 
 This [video](https://www.youtube.com/watch?v=afy_EEq_4Go) is the great resource for configuration. 
 
+Testing with polymer [help page](https://www.polymer-project.org/2.0/docs/tools/tests).
 
 ### Timezone
 

@@ -121,8 +121,8 @@
         return timelineData
         .map((tdata, index) => [ 
           new Date(tdata.datetime), 
-          tdata.timeVal,
-          `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
+          tdata.time.val,
+          `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time.str}`
         ]);
       }
 
@@ -135,8 +135,8 @@
         // .filter(td => !td.dateValIsOutlier)
         .map((tdata, index) => [ 
           new Date(tdata.datetime), 
-          tdata.timeVal,
-          `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time}`
+          tdata.time.val,
+          `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time.str}`
         ]);
       }
 
