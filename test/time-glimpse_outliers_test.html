@@ -1,0 +1,102 @@
+<!-- 
+  http://127.0.0.1:8081/components/time-glimpse/test/
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>time-glimpse outliers test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../time-glimpse.html">
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <time-glimpse></time-glimpse>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite( 'outliers', () => {
+        let element;
+        let td, expectedDateOutlier, expectedTimeOutlier;
+
+        setup( () => {
+          replace('paper-tabs').with('fake-paper-tabs');
+          replace('paper-tab').with('fake-paper-tab');
+          replace('iron-pages').with('fake-iron-pages');
+          replace('paper-toggle-button').with('fake-paper-toggle-button');
+          replace('paper-icon-button').with('fake-paper-icon-button');
+          
+          replace('chart-calendar').with('fake-chart-calendar');
+          replace('chart-scatter').with('fake-chart-scatter');
+          const datetimes = [ 
+            "2016-02-11T02:00:00.000Z", 
+            "2017-03-11T19:48:59.000Z", 
+            "2017-02-12T02:00:00.000Z", 
+            "2017-02-20T03:00:00.000Z", 
+            "2017-03-23T04:00:00.000Z", 
+            "2017-04-02T06:00:00.000Z", 
+            "2017-04-09T03:00:00.000Z", 
+            "2017-05-28T06:00:00.000Z", 
+            "2017-07-01T04:59:59.000Z", 
+            "2017-08-16T04:30:00.000Z", 
+            "2017-09-03T03:00:00.000Z", 
+            "2017-09-10T03:00:00.000Z" 
+          ];
+
+          element = fixture('BasicTestFixture');
+          element.set('datetimes', datetimes);
+          td = element.timelineData;
+          expectedDateOutlier = td[0]; 
+          expectedTimeOutlier = td[1];
+          replace('chart-calendar').with('fake-chart-calendar');
+        });
+
+        test( 'date outliers are annotated', () => assert.equal  ( expectedDateOutlier.isOutlier ,  'date' ) );
+        test( 'time outliers are annotated', () => assert.equal  ( expectedTimeOutlier.isOutlier ,  'time' ) );
+        test( 'no-outliers is properly set to false', () => assert.equal  ( element.noOutliers ,  false ) );
+
+        test( 'should ignore outliers in small datasets', () => {
+          const datetimes = [ 
+            "2016-02-11T02:00:00.000Z", 
+            "2017-03-11T19:48:59.000Z", 
+            "2017-02-12T02:00:00.000Z", 
+          ];
+
+          // element = fixture('BasicTestFixture');
+          element.set('datetimes', datetimes);
+          td = element.timelineData;
+          assert.notEqual  ( td[0].isOutlier,  `no outlier` ,  true );
+        });
+
+        test( 'should set no-outliers if there are no outliers', () => {
+          const datetimes = [ 
+          "2017-02-11T02:00:00.000Z", 
+          "2017-03-11T03:48:59.000Z", 
+          "2017-02-12T02:00:00.000Z", 
+          "2017-02-20T03:00:00.000Z", 
+          "2017-03-23T04:00:00.000Z", 
+          "2017-04-02T03:00:00.000Z", 
+          "2017-04-09T03:00:00.000Z", 
+          "2017-04-28T04:00:00.000Z", 
+        ];
+
+          // element = fixture('BasicTestFixture');
+          element.set('datetimes', datetimes);
+          console.log(JSON.stringify(element.timelineData))
+          assert.equal  ( element.noOutliers ,  true );
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

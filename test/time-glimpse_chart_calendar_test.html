@@ -1,0 +1,63 @@
+<!-- 
+  http://127.0.0.1:8081/components/time-glimpse/test/
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>time-glimpse test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../time-glimpse.html">
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <time-glimpse></time-glimpse>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('calendar chart', () => {
+        let element;
+        let calendar;
+
+        setup(() => {
+          replace('paper-tabs').with('fake-paper-tabs');
+          replace('paper-tab').with('fake-paper-tab');
+          // replace('iron-pages').with('fake-iron-pages');
+          replace('paper-toggle-button').with('fake-paper-toggle-button');
+          replace('paper-icon-button').with('fake-paper-icon-button');
+
+          // replace('chart-calendar').with('fake-chart-calendar');
+          replace('chart-scatter').with('fake-chart-scatter');          
+          const datetimes = [
+            '2015-08-11T14:17:00-0300',
+            '2017-08-07T16:00:00-0300',
+            '2017-08-23T15:22:00-0300',
+            '2017-09-01T16:34:00-0300',
+            '2017-08-17T15:22:00-0300',
+            '2017-09-21T17:44:00-0300',
+            '2017-09-13T14:48:00-0300',
+          ];
+          element = fixture('BasicTestFixture');
+          element.set('datetimes', datetimes);
+          calendar = element.shadowRoot.querySelector('#chartCalendar');
+          // console.log(calendar);
+          // console.log(JSON.stringify(calendar.chartRows));
+        });
+
+        test('should fill chartRows property', () => assert.equal( calendar.chartRows.length , 7));
+        test('should properly sum years', () => assert.equal( calendar.years , 3));
+
+      });
+    </script>
+
+  </body>
+</html>

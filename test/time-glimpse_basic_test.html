@@ -1,0 +1,89 @@
+<!-- 
+  http://127.0.0.1:8081/components/time-glimpse/test/
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>time-glimpse test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../time-glimpse.html">
+  </head>
+  <body>
+
+    <test-fixture id="WrongParametersTestFixture">
+      <template>
+        <time-glimpse datetimes="IShouldBeAnArrayNotAString"></time-glimpse>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <time-glimpse></time-glimpse>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite( 'basic funcionality', () => {
+        let element;
+        let firstDate;
+        
+        setup( () => {
+          replace('paper-tabs').with('fake-paper-tabs');
+          replace('paper-tab').with('fake-paper-tab');
+          replace('iron-pages').with('fake-iron-pages');
+          replace('paper-toggle-button').with('fake-paper-toggle-button');
+          replace('paper-icon-button').with('fake-paper-icon-button');
+          replace('chart-calendar').with('fake-chart-calendar');
+          replace('chart-scatter').with('fake-chart-scatter');          
+          const datetimes = [
+            '2017-08-11T14:17:00-0300',
+            '2017-08-07T16:00:00-0300',
+            '2017-08-23T15:22:00-0300',
+            '2017-09-01T16:34:00-0300',
+            '2017-08-17T15:22:00-0300',
+            '2017-09-21T17:44:00-0300',
+            '2017-09-13T14:48:00-0300',
+          ];
+          element = fixture('BasicTestFixture');
+          element.set('datetimes', datetimes);
+          firstDate = element.timelineData[0];
+          replace('chart-calendar').with('fake-chart-calendar');
+        });
+        
+        test( 'pass wrongly formatted data behaves properly', () => {
+          const wrongParametersElement = fixture('WrongParametersTestFixture');
+          assert.equal( wrongParametersElement.timelineData, undefined );
+        });
+
+        test( 'instantiating the element with correct data works', () => {
+          assert.equal  ( element.datetimes[0],  '2017-08-11T14:17:00-0300' );
+        });
+
+        test( 'datetime is correctly passed', () => {
+          // console.log(JSON.stringify(firstDate));
+          const noTimeDate = firstDate.datetime.toString().split('2017')[0].trim();
+          assert.equal  ( `${noTimeDate}`,  'Fri Aug 11' );
+        });
+
+        test( 'weekday is properly calculated',     () => assert.equal  ( `${firstDate.weekday}`      ,  'fri'                 ) );
+        test( 'time string is properly calculated', () => assert.equal  ( `${firstDate.time.str}`     ,  '14:17'               ) );
+        test( 'time value is properly calculated',  () => assert.equal  ( `${firstDate.time.val}`     ,  '14.283333333333333'  ) );
+        test( 'date string is properly calculated', () => assert.equal  ( `${firstDate.date.str}`     ,  '08/11/2017'          ) );
+        test( 'date value is properly calculated',  () => assert.equal  ( `${firstDate.date.val}`     ,  '24212.916666666668'  ) );
+        test( 'formatted date is calculated',       () => assert.equal  ( `${firstDate.formattedDate}`,  'August 11, 2017'     ) );
+
+      });
+
+      a11ySuite('BasicTestFixture');
+
+    </script>
+
+  </body>
+</html>
