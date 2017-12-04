@@ -24,208 +24,203 @@
     </test-fixture>
 
     <script>
-      suite( 'wrong parameters', () => {
-        let element;
+      suite( 'tests', () => {
 
-        setup( () => {
+        let element;
+        setup(() => {
           replace('paper-tabs').with('fake-paper-tabs');
           replace('paper-tab').with('fake-paper-tab');
-          replace('iron-pages').with('fake-iron-pages');
+          // replace('iron-pages').with('fake-iron-pages');
           replace('paper-toggle-button').with('fake-paper-toggle-button');
-          replace('paper-icon-button').with('fake-paper-icon-button');
-          
-          replace('chart-calendar').with('fake-chart-calendar');
-          replace('chart-scatter').with('fake-chart-scatter');
+          replace('chart-scatter-controls').with('fake-chart-scatter-controls');
           element = fixture('BasicTestFixture');
-          element.set('datetimes', { unexpectedKey: 'unexpectedValue' });
-        });
-    
-        test( 'pass wrongly formatted data behaves properly', () => {
-          assert.equal( element.timelineData, undefined );
-        });
-      });
-
-      suite( 'basic funcionality', () => {
-        let element;
-        let firstDate;
-
-        setup( () => {
-          replace('chart-calendar').with('fake-chart-calendar');
-          replace('chart-scatter').with('fake-chart-scatter');          
-          const datetimes = [
-            '2017-08-11T14:17:00-0300',
-            '2017-08-07T16:00:00-0300',
-            '2017-08-23T15:22:00-0300',
-            '2017-09-01T16:34:00-0300',
-            '2017-08-17T15:22:00-0300',
-            '2017-09-21T17:44:00-0300',
-            '2017-09-13T14:48:00-0300',
-          ];
-          element = fixture('BasicTestFixture');
-          element.set('datetimes', datetimes);
-          firstDate = element.timelineData[0];
-          replace('chart-calendar').with('fake-chart-calendar');
-        });
-    
-        test( 'instantiating the element with correct data works', () => {
-          assert.equal  ( element.datetimes[0],  '2017-08-11T14:17:00-0300' );
         });
 
-        test( 'datetime is correctly passed', () => {
-          // console.log(JSON.stringify(firstDate));
-          const noTimeDate = firstDate.datetime.toString().split('2017')[0].trim();
-          assert.equal  ( `${noTimeDate}`,  'Fri Aug 11' );
+        suite( 'wrong parameters', () => {
+
+          setup( () => {
+            replace('chart-calendar').with('fake-chart-calendar');
+            replace('chart-scatter').with('fake-chart-scatter');
+            element.set('datetimes', { unexpectedKey: 'unexpectedValue' });
+          });
+      
+          test( 'pass wrongly formatted data behaves properly', () => {
+            assert.equal( element.timelineData, undefined );
+          });
         });
 
-        test( 'weekday is properly calculated',     () => assert.equal  ( `${firstDate.weekday}`      ,  'fri'                 ) );
-        test( 'time string is properly calculated', () => assert.equal  ( `${firstDate.time.str}`     ,  '14:17'               ) );
-        test( 'time value is properly calculated',  () => assert.equal  ( `${firstDate.time.val}`     ,  '14.283333333333333'  ) );
-        test( 'date string is properly calculated', () => assert.equal  ( `${firstDate.date.str}`     ,  '08/11/2017'          ) );
-        test( 'date value is properly calculated',  () => assert.equal  ( `${firstDate.date.val}`     ,  '24212.916666666668'  ) );
-        test( 'formatted date is calculated',       () => assert.equal  ( `${firstDate.formattedDate}`,  'August 11, 2017'     ) );
+        suite( 'basic funcionality', () => {
+          let element;
+          let firstDate;
 
-      });
+          setup( () => {
+            replace('chart-calendar').with('fake-chart-calendar');
+            replace('chart-scatter').with('fake-chart-scatter');          
+            const datetimes = [
+              '2017-08-11T14:17:00-0300',
+              '2017-08-07T16:00:00-0300',
+              '2017-08-23T15:22:00-0300',
+              '2017-09-01T16:34:00-0300',
+              '2017-08-17T15:22:00-0300',
+              '2017-09-21T17:44:00-0300',
+              '2017-09-13T14:48:00-0300',
+            ];
+            element = fixture('BasicTestFixture');
+            element.set('datetimes', datetimes);
+            firstDate = element.timelineData[0];
+            replace('chart-calendar').with('fake-chart-calendar');
+          });
+      
+          test( 'instantiating the element with correct data works', () => {
+            assert.equal  ( element.datetimes[0],  '2017-08-11T14:17:00-0300' );
+          });
 
-      suite( 'outliers', () => {
-        let element;
-        let td, expectedDateOutlier, expectedTimeOutlier;
+          test( 'datetime is correctly passed', () => {
+            // console.log(JSON.stringify(firstDate));
+            const noTimeDate = firstDate.datetime.toString().split('2017')[0].trim();
+            assert.equal  ( `${noTimeDate}`,  'Fri Aug 11' );
+          });
 
-        setup( () => {
-          replace('paper-tabs').with('fake-paper-tabs');
-          replace('paper-tab').with('fake-paper-tab');
-          replace('iron-pages').with('fake-iron-pages');
-          replace('paper-toggle-button').with('fake-paper-toggle-button');
-          replace('paper-icon-button').with('fake-paper-icon-button');
-          
-          replace('chart-calendar').with('fake-chart-calendar');
-          replace('chart-scatter').with('fake-chart-scatter');
-          const datetimes = [ 
-            "2016-02-11T02:00:00.000Z", 
-            "2017-03-11T19:48:59.000Z", 
+          test( 'weekday is properly calculated',     () => assert.equal  ( `${firstDate.weekday}`      ,  'fri'                 ) );
+          test( 'time string is properly calculated', () => assert.equal  ( `${firstDate.time.str}`     ,  '14:17'               ) );
+          test( 'time value is properly calculated',  () => assert.equal  ( `${firstDate.time.val}`     ,  '14.283333333333333'  ) );
+          test( 'date string is properly calculated', () => assert.equal  ( `${firstDate.date.str}`     ,  '08/11/2017'          ) );
+          test( 'date value is properly calculated',  () => assert.equal  ( `${firstDate.date.val}`     ,  '24212.916666666668'  ) );
+          test( 'formatted date is calculated',       () => assert.equal  ( `${firstDate.formattedDate}`,  'August 11, 2017'     ) );
+
+        });
+
+        suite( 'outliers', () => {
+          let element;
+          let td, expectedDateOutlier, expectedTimeOutlier;
+
+          setup( () => {
+            replace('chart-calendar').with('fake-chart-calendar');
+            replace('chart-scatter').with('fake-chart-scatter');
+            const datetimes = [ 
+              "2016-02-11T02:00:00.000Z", 
+              "2017-03-11T19:48:59.000Z", 
+              "2017-02-12T02:00:00.000Z", 
+              "2017-02-20T03:00:00.000Z", 
+              "2017-03-23T04:00:00.000Z", 
+              "2017-04-02T06:00:00.000Z", 
+              "2017-04-09T03:00:00.000Z", 
+              "2017-05-28T06:00:00.000Z", 
+              "2017-07-01T04:59:59.000Z", 
+              "2017-08-16T04:30:00.000Z", 
+              "2017-09-03T03:00:00.000Z", 
+              "2017-09-10T03:00:00.000Z" 
+            ];
+
+            element = fixture('BasicTestFixture');
+            element.set('datetimes', datetimes);
+            td = element.timelineData;
+            expectedDateOutlier = td[0]; 
+            expectedTimeOutlier = td[1];
+            replace('chart-calendar').with('fake-chart-calendar');
+          });
+
+          test( 'date outliers are annotated', () => assert.equal  ( expectedDateOutlier.isOutlier ,  'date' ) );
+          test( 'time outliers are annotated', () => assert.equal  ( expectedTimeOutlier.isOutlier ,  'time' ) );
+          test( 'no-outliers is properly set to false', () => assert.equal  ( element.noOutliers ,  false ) );
+
+          test( 'should ignore outliers in small datasets', () => {
+            const datetimes = [ 
+              "2016-02-11T02:00:00.000Z", 
+              "2017-03-11T19:48:59.000Z", 
+              "2017-02-12T02:00:00.000Z", 
+            ];
+
+            // element = fixture('BasicTestFixture');
+            element.set('datetimes', datetimes);
+            td = element.timelineData;
+            assert.notEqual  ( td[0].isOutlier,  `no outlier` ,  true );
+          });
+
+          test( 'should set no-outliers if there are no outliers', () => {
+            const datetimes = [ 
+            "2017-02-11T02:00:00.000Z", 
+            "2017-03-11T03:48:59.000Z", 
             "2017-02-12T02:00:00.000Z", 
             "2017-02-20T03:00:00.000Z", 
             "2017-03-23T04:00:00.000Z", 
-            "2017-04-02T06:00:00.000Z", 
+            "2017-04-02T03:00:00.000Z", 
             "2017-04-09T03:00:00.000Z", 
-            "2017-05-28T06:00:00.000Z", 
-            "2017-07-01T04:59:59.000Z", 
-            "2017-08-16T04:30:00.000Z", 
-            "2017-09-03T03:00:00.000Z", 
-            "2017-09-10T03:00:00.000Z" 
+            "2017-04-28T04:00:00.000Z", 
           ];
 
-          element = fixture('BasicTestFixture');
-          element.set('datetimes', datetimes);
-          td = element.timelineData;
-          expectedDateOutlier = td[0]; 
-          expectedTimeOutlier = td[1];
-          replace('chart-calendar').with('fake-chart-calendar');
+            // element = fixture('BasicTestFixture');
+            element.set('datetimes', datetimes);
+            // console.log(JSON.stringify(element.timelineData))
+            assert.equal  ( element.noOutliers ,  true );
+          });
+
         });
 
-        test( 'date outliers are annotated', () => assert.equal  ( expectedDateOutlier.isOutlier ,  'date' ) );
-        test( 'time outliers are annotated', () => assert.equal  ( expectedTimeOutlier.isOutlier ,  'time' ) );
-        test( 'no-outliers is properly set to false', () => assert.equal  ( element.noOutliers ,  false ) );
+        a11ySuite('BasicTestFixture');
 
-        test( 'should ignore outliers in small datasets', () => {
-          const datetimes = [ 
-            "2016-02-11T02:00:00.000Z", 
-            "2017-03-11T19:48:59.000Z", 
-            "2017-02-12T02:00:00.000Z", 
-          ];
+        suite('calendar chart', () => {
+          let element;
+          let calendar;
 
-          // element = fixture('BasicTestFixture');
-          element.set('datetimes', datetimes);
-          td = element.timelineData;
-          assert.notEqual  ( td[0].isOutlier,  `no outlier` ,  true );
+          setup(() => {
+            // replace('chart-calendar').with('fake-chart-calendar');
+            replace('chart-scatter').with('fake-chart-scatter');          
+            const datetimes = [
+              '2015-08-11T14:17:00-0300',
+              '2017-08-07T16:00:00-0300',
+              '2017-08-23T15:22:00-0300',
+              '2017-09-01T16:34:00-0300',
+              '2017-08-17T15:22:00-0300',
+              '2017-09-21T17:44:00-0300',
+              '2017-09-13T14:48:00-0300',
+            ];
+            element = fixture('BasicTestFixture');
+            element.set('datetimes', datetimes);
+            calendar = element.shadowRoot.querySelector('#chartCalendar');
+            // console.log(calendar);
+            // console.log(JSON.stringify(calendar.chartRows));
+          });
+
+          test('should fill chartRows property', () => assert.equal( calendar.chartRows.length , 7));
+          test('should properly sum years', () => assert.equal( calendar.years , 3));
+
         });
 
-        test( 'should set no-outliers if there are no outliers', () => {
-          const datetimes = [ 
-          "2017-02-11T02:00:00.000Z", 
-          "2017-03-11T03:48:59.000Z", 
-          "2017-02-12T02:00:00.000Z", 
-          "2017-02-20T03:00:00.000Z", 
-          "2017-03-23T04:00:00.000Z", 
-          "2017-04-02T03:00:00.000Z", 
-          "2017-04-09T03:00:00.000Z", 
-          "2017-04-28T04:00:00.000Z", 
-        ];
+        suite('scatter chart', () => {
+          let element;
+          let scatter;
 
-          // element = fixture('BasicTestFixture');
-          element.set('datetimes', datetimes);
-          console.log(JSON.stringify(element.timelineData))
-          assert.equal  ( element.noOutliers ,  true );
-        });
-
-      });
-
-      a11ySuite('BasicTestFixture');
-
-      suite('calendar chart', () => {
-        let element;
-        let calendar;
-
-        setup(() => {
-          replace('paper-tabs').with('fake-paper-tabs');
-          replace('paper-tab').with('fake-paper-tab');
-          replace('iron-pages').with('fake-iron-pages');
-          replace('paper-toggle-button').with('fake-paper-toggle-button');
-          replace('paper-icon-button').with('fake-paper-icon-button');
+          setup(() => {
+            replace('chart-calendar').with('fake-chart-calendar');
+            // replace('chart-scatter').with('fake-chart-scatter');          
+            const datetimes = [
+              '2015-08-11T14:17:00-0300',
+              '2017-08-07T16:00:00-0300',
+              '2017-08-23T15:22:00-0300',
+              '2017-09-01T16:34:00-0300',
+              '2017-08-17T15:22:00-0300',
+              '2017-09-21T17:44:00-0300',
+              '2017-09-13T14:48:00-0300',
+            ];
+            element = fixture('BasicTestFixture');
+            element.set('datetimes', datetimes);
+            scatter = element.shadowRoot.querySelector('#chartScatter');
+            // console.log(scatter);
+            // console.log(JSON.stringify(scatter.chartRows));
+          });
           
-          // replace('chart-calendar').with('fake-chart-calendar');
-          replace('chart-scatter').with('fake-chart-scatter');          
-          const datetimes = [
-            '2015-08-11T14:17:00-0300',
-            '2017-08-07T16:00:00-0300',
-            '2017-08-23T15:22:00-0300',
-            '2017-09-01T16:34:00-0300',
-            '2017-08-17T15:22:00-0300',
-            '2017-09-21T17:44:00-0300',
-            '2017-09-13T14:48:00-0300',
-          ];
-          element = fixture('BasicTestFixture');
-          element.set('datetimes', datetimes);
-          calendar = element.shadowRoot.querySelector('#chartCalendar');
-          // console.log(calendar);
-          // console.log(JSON.stringify(calendar.chartRows));
+          test('should fill chartRows property', () => assert.equal( scatter.chartRows.length , 7));
+          // test.only('should properly sum years', () => {
+          //   const toggleOutliers = element.shadowRoot.querySelector('#tabs');
+          //   const calendar = element.shadowRoot.querySelector('#chartCalendar');
+          //   console.log(scatter)
+          //   console.log(calendar)
+          //   console.log(toggleOutliers)
+          //   // assert.equal( scatter.years , 3)
+          // });
+
         });
-
-        test('should fill chartRows property', () => assert.equal( calendar.chartRows.length , 7));
-        test('should properly sum years', () => assert.equal( calendar.years , 3));
-
-      });
-
-      suite('scatter chart', () => {
-        let element;
-        let scatter;
-
-        setup(() => {
-          replace('paper-tabs').with('fake-paper-tabs');
-          replace('paper-tab').with('fake-paper-tab');
-          replace('iron-pages').with('fake-iron-pages');
-          replace('paper-toggle-button').with('fake-paper-toggle-button');
-          replace('paper-icon-button').with('fake-paper-icon-button');
-          
-          replace('chart-calendar').with('fake-chart-calendar');
-          // replace('chart-scatter').with('fake-chart-scatter');          
-          const datetimes = [
-            '2015-08-11T14:17:00-0300',
-            '2017-08-07T16:00:00-0300',
-            '2017-08-23T15:22:00-0300',
-            '2017-09-01T16:34:00-0300',
-            '2017-08-17T15:22:00-0300',
-            '2017-09-21T17:44:00-0300',
-            '2017-09-13T14:48:00-0300',
-          ];
-          element = fixture('BasicTestFixture');
-          element.set('datetimes', datetimes);
-          scatter = element.shadowRoot.querySelector('#chartScatter');
-          // console.log(scatter);
-          // console.log(JSON.stringify(scatter.chartRows));
-        });
-
-        test('should fill chartRows property', () => assert.equal( scatter.chartRows.length , 7));
-        // test('should properly sum years', () => assert.equal( scatter.years , 3));
 
       });
     </script>
