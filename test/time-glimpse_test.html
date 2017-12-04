@@ -23,31 +23,25 @@
       </template>
     </test-fixture>
 
-    <test-fixture id="ChangedPropertyTestFixture">
-      <template>
-        <time-glimpse prop1="new-prop1"></time-glimpse>
-      </template>
-    </test-fixture>
-
     <script>
-      describe( 'wrong parameters', () => {
+      suite( 'wrong parameters', () => {
         let element;
 
-        before( () => {
+        setup( () => {
           element = fixture('BasicTestFixture');
           element.set('datetimes', { unexpectedKey: 'unexpectedValue' });
         });
     
-        it( 'pass wrongly formatted data behaves properly', () => {
-          expect( element.timelineData,  `datetimes wrongly formatted` ).to.equal  ( undefined );
+        test( 'pass wrongly formatted data behaves properly', () => {
+          assert.equal( element.timelineData, undefined );
         });
       });
 
-      describe( 'setup', () => {
+      suite( 'setup', () => {
         let element;
         let firstDate;
 
-        before( () => {
+        setup( () => {
           const datetimes = [
             '2017-08-11T14:17:00-0300',
             '2017-08-07T16:00:00-0300',
@@ -62,30 +56,30 @@
           firstDate = element.timelineData[0];
         });
     
-        it( 'instantiating the element with correct data works', () => {
-          expect( element.datetimes[0],  `first datetime` ).to.equal  ( '2017-08-11T14:17:00-0300' );
+        test( 'instantiating the element with correct data works', () => {
+          assert.equal  ( element.datetimes[0],  '2017-08-11T14:17:00-0300' );
         });
 
-        it( 'datetime is correctly passed', () => {
+        test( 'datetime is correctly passed', () => {
           // console.log(JSON.stringify(firstDate));
           const noTimeDate = firstDate.datetime.toString().split('2017')[0].trim();
-          expect( `${noTimeDate}`,  `firstDate` ).to.equal  ( 'Fri Aug 11' );
+          assert.equal  ( `${noTimeDate}`,  'Fri Aug 11' );
         });
 
-        it( 'weekday is properly calculated',     () => expect( `${firstDate.weekday}`      ).to.equal  ( 'fri'                 ) );
-        it( 'time string is properly calculated', () => expect( `${firstDate.time.str}`     ).to.equal  ( '14:17'               ) );
-        it( 'time value is properly calculated',  () => expect( `${firstDate.time.val}`     ).to.equal  ( '14.283333333333333'  ) );
-        it( 'date string is properly calculated', () => expect( `${firstDate.date.str}`     ).to.equal  ( '08/11/2017'          ) );
-        it( 'date value is properly calculated',  () => expect( `${firstDate.date.val}`     ).to.equal  ( '24212.916666666668'  ) );
-        it( 'formatted date is calculated',       () => expect( `${firstDate.formattedDate}`).to.equal  ( 'August 11, 2017'     ) );
+        test( 'weekday is properly calculated',     () => assert.equal  ( `${firstDate.weekday}`      ,  'fri'                 ) );
+        test( 'time string is properly calculated', () => assert.equal  ( `${firstDate.time.str}`     ,  '14:17'               ) );
+        test( 'time value is properly calculated',  () => assert.equal  ( `${firstDate.time.val}`     ,  '14.283333333333333'  ) );
+        test( 'date string is properly calculated', () => assert.equal  ( `${firstDate.date.str}`     ,  '08/11/2017'          ) );
+        test( 'date value is properly calculated',  () => assert.equal  ( `${firstDate.date.val}`     ,  '24212.916666666668'  ) );
+        test( 'formatted date is calculated',       () => assert.equal  ( `${firstDate.formattedDate}`,  'August 11, 2017'     ) );
 
       });
 
-      describe( 'outliers', () => {
+      suite( 'outliers', () => {
         let element;
         let td, expectedDateOutlier, expectedTimeOutlier;
 
-        before( () => {
+        setup( () => {
           const datetimes = [ 
             "2016-02-11T02:00:00.000Z", 
             "2017-03-11T19:48:59.000Z", 
@@ -108,22 +102,74 @@
           expectedTimeOutlier = td[1];
         });
 
-        it( 'date outliers are annotated', () => expect( expectedDateOutlier.isOutlier ).to.equal  ( 'date' ) );
-        it( 'time outliers are annotated', () => expect( expectedTimeOutlier.isOutlier ).to.equal  ( 'time' ) );
+        test( 'date outliers are annotated', () => assert.equal  ( expectedDateOutlier.isOutlier ,  'date' ) );
+        test( 'time outliers are annotated', () => assert.equal  ( expectedTimeOutlier.isOutlier ,  'time' ) );
+        test( 'no-outliers is properly set to false', () => assert.equal  ( element.noOutliers ,  false ) );
 
-        it( 'should ignore outliers in small datasets', () => {
+        test( 'should ignore outliers in small datasets', () => {
           const datetimes = [ 
             "2016-02-11T02:00:00.000Z", 
             "2017-03-11T19:48:59.000Z", 
             "2017-02-12T02:00:00.000Z", 
-            "2017-02-20T03:00:00.000Z", 
           ];
 
           // element = fixture('BasicTestFixture');
           element.set('datetimes', datetimes);
           td = element.timelineData;
-          expect( td[0].isOutlier,  `no outlier` ).to.not.equal  ( true );
+          assert.notEqual  ( td[0].isOutlier,  `no outlier` ,  true );
         });
+
+        test( 'should set no-outliers if there are no outliers', () => {
+          const datetimes = [ 
+          "2017-02-11T02:00:00.000Z", 
+          "2017-03-11T03:48:59.000Z", 
+          "2017-02-12T02:00:00.000Z", 
+          "2017-02-20T03:00:00.000Z", 
+          "2017-03-23T04:00:00.000Z", 
+          "2017-04-02T03:00:00.000Z", 
+          "2017-04-09T03:00:00.000Z", 
+          "2017-04-28T04:00:00.000Z", 
+        ];
+
+          // element = fixture('BasicTestFixture');
+          element.set('datetimes', datetimes);
+          console.log(JSON.stringify(element.timelineData))
+          assert.equal  ( element.noOutliers ,  true );
+        });
+
+      });
+
+      a11ySuite('BasicTestFixture');
+
+      suite('calendar chart', () => {
+        let element;
+        let calendar;
+
+        setup(() => {
+          const datetimes = [
+            '2015-08-11T14:17:00-0300',
+            '2017-08-07T16:00:00-0300',
+            '2017-08-23T15:22:00-0300',
+            '2017-09-01T16:34:00-0300',
+            '2017-08-17T15:22:00-0300',
+            '2017-09-21T17:44:00-0300',
+            '2017-09-13T14:48:00-0300',
+          ];
+          element = fixture('BasicTestFixture');
+          element.set('datetimes', datetimes);
+          calendar = element.shadowRoot.querySelector('chart-calendar');
+          // console.log(JSON.stringify(calendar.chartRows));
+        });
+
+        test('should fill chartRows property', () => assert.equal( calendar.chartRows.length , 7));
+        test('should properly sum years', () => assert.equal( calendar.years , 3));
+
+        // test('should loose one value when outliers are hidden', () => {
+        //   let showOutlierToggle = element.shadowRoot.querySelector('paper-toggle-button');
+        //   console.log(showOutlierToggle);
+        //   // showOutlierToggle.
+        //   // assert.equal( calendar.chartRows.length , 7))
+        // });
 
       });
     </script>
