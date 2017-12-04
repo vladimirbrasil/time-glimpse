@@ -28,6 +28,8 @@
         let element;
 
         setup( () => {
+          replace('chart-calendar').with('fake-chart-calendar');
+          replace('chart-scatter').with('fake-chart-scatter');
           element = fixture('BasicTestFixture');
           element.set('datetimes', { unexpectedKey: 'unexpectedValue' });
         });
@@ -37,11 +39,13 @@
         });
       });
 
-      suite( 'setup', () => {
+      suite( 'basic funcionality', () => {
         let element;
         let firstDate;
 
         setup( () => {
+          replace('chart-calendar').with('fake-chart-calendar');
+          replace('chart-scatter').with('fake-chart-scatter');          
           const datetimes = [
             '2017-08-11T14:17:00-0300',
             '2017-08-07T16:00:00-0300',
@@ -54,6 +58,7 @@
           element = fixture('BasicTestFixture');
           element.set('datetimes', datetimes);
           firstDate = element.timelineData[0];
+          replace('chart-calendar').with('fake-chart-calendar');
         });
     
         test( 'instantiating the element with correct data works', () => {
@@ -80,6 +85,8 @@
         let td, expectedDateOutlier, expectedTimeOutlier;
 
         setup( () => {
+          replace('chart-calendar').with('fake-chart-calendar');
+          replace('chart-scatter').with('fake-chart-scatter');
           const datetimes = [ 
             "2016-02-11T02:00:00.000Z", 
             "2017-03-11T19:48:59.000Z", 
@@ -100,6 +107,7 @@
           td = element.timelineData;
           expectedDateOutlier = td[0]; 
           expectedTimeOutlier = td[1];
+          replace('chart-calendar').with('fake-chart-calendar');
         });
 
         test( 'date outliers are annotated', () => assert.equal  ( expectedDateOutlier.isOutlier ,  'date' ) );
@@ -146,6 +154,8 @@
         let calendar;
 
         setup(() => {
+          // replace('chart-calendar').with('fake-chart-calendar');
+          replace('chart-scatter').with('fake-chart-scatter');          
           const datetimes = [
             '2015-08-11T14:17:00-0300',
             '2017-08-07T16:00:00-0300',
@@ -157,19 +167,41 @@
           ];
           element = fixture('BasicTestFixture');
           element.set('datetimes', datetimes);
-          calendar = element.shadowRoot.querySelector('chart-calendar');
+          calendar = element.shadowRoot.querySelector('#chartCalendar');
+          // console.log(calendar);
           // console.log(JSON.stringify(calendar.chartRows));
         });
 
         test('should fill chartRows property', () => assert.equal( calendar.chartRows.length , 7));
         test('should properly sum years', () => assert.equal( calendar.years , 3));
 
-        // test('should loose one value when outliers are hidden', () => {
-        //   let showOutlierToggle = element.shadowRoot.querySelector('paper-toggle-button');
-        //   console.log(showOutlierToggle);
-        //   // showOutlierToggle.
-        //   // assert.equal( calendar.chartRows.length , 7))
-        // });
+      });
+
+      suite('scatter chart', () => {
+        let element;
+        let scatter;
+
+        setup(() => {
+          replace('chart-calendar').with('fake-chart-calendar');
+          // replace('chart-scatter').with('fake-chart-scatter');          
+          const datetimes = [
+            '2015-08-11T14:17:00-0300',
+            '2017-08-07T16:00:00-0300',
+            '2017-08-23T15:22:00-0300',
+            '2017-09-01T16:34:00-0300',
+            '2017-08-17T15:22:00-0300',
+            '2017-09-21T17:44:00-0300',
+            '2017-09-13T14:48:00-0300',
+          ];
+          element = fixture('BasicTestFixture');
+          element.set('datetimes', datetimes);
+          scatter = element.shadowRoot.querySelector('#chartScatter');
+          // console.log(scatter);
+          // console.log(JSON.stringify(scatter.chartRows));
+        });
+
+        test('should fill chartRows property', () => assert.equal( scatter.chartRows.length , 7));
+        // test('should properly sum years', () => assert.equal( scatter.years , 3));
 
       });
     </script>

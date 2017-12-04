@@ -118,7 +118,7 @@ Expect more glimpses to be added in the future.
     <annotate-outliers timeline-data="{{timelineData}}" no-outliers={{noOutliers}}></annotate-outliers>
 
     <template is="dom-if" if="[[!noOutliers]]">
-      <paper-toggle-button checked="{{showOutliers}}" disabled="[[noOutliers]]">
+      <paper-toggle-button id="showOutliersToggle" checked="{{showOutliers}}" disabled="[[noOutliers]]">
         <span class$="[[computeOutliersToggleClass(showOutliers)]]">Outliers</span>
       </paper-toggle-button>
     </template>
@@ -131,25 +131,25 @@ Expect more glimpses to be added in the future.
 
     <iron-pages selected="{{selected}}">
       <div>
-        <chart-calendar 
+        <chart-calendar id="chartCalendar"
         show-outliers="[[showOutliers]]"
         chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]" height="{{calendarHeight}}"></chart-calendar>        
       </div>
       <div>
-        <chart-scatter
+        <chart-scatter id="chartScatter"
         show-outliers="[[showOutliers]]"
         expanded="[[expanded]]" fullscreen="[[fullscreen]]"
         chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]">
       </chart-scatter>    
       <chart-scatter-controls expanded="{{expanded}}" fullscreen="{{fullscreen}}"></chart-scatter-controls>
       </div>
-      <div>
+      <!-- <div>
         <chart-scatter-controls expanded="{{expandedTrad}}" fullscreen="{{fullscreen}}"></chart-scatter-controls>
         <chart-traditionalscatter
             expanded="[[expandedTrad]]" fullscreen="[[fullscreen]]"
             chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]">
         </chart-traditionalscatter>        
-      </div>
+      </div> -->
     </iron-pages>
 
   </template>
@@ -213,7 +213,7 @@ Expect more glimpses to be added in the future.
         super.connectedCallback();
         // console.log(window.innerWidth);
         this.set('hostWidth', this.offsetWidth);
-        console.log(this.hostWidth);
+        console.log(`hostWidth: ${this.hostWidth}`);
       }
 
       observeCalendarHeight(calendarHeight) {
