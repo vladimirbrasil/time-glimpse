@@ -58,7 +58,10 @@ Not stub `iron-pages` causes several chrome-render processes to consume all CPU.
 #### paper-toggle-button
 Stub `paper-toggle-button` causes tests to fail. For some reason. Actually, couldn't manage to access `paper-toggle-button` at tests, when tried to do so. Build a test that toggles that button would be useful.
 
-## Todos
+# Todos
 
 Should test charts.
+Should detect what is causing excessive rendering cpu consumption.
+Should change iron-pages if it is really causing excessive rendering cpu consumption.
+Should rely less on google charts if they are causing excessive rendering cpu consumption.
 
