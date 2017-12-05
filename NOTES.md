@@ -50,8 +50,15 @@ before_install:
 ```
 The above code is needed at **travis.yml** file for tests to evaluate results properly.
 
+## Known issues
 
-### Todos
+#### iron-pages
+Not stub `iron-pages` causes several chrome-render processes to consume all CPU. Inspect element's CPU usage. Inspect render processes.
+
+#### paper-toggle-button
+Stub `paper-toggle-button` causes tests to fail. For some reason. Actually, couldn't manage to access `paper-toggle-button` at tests, when tried to do so. Build a test that toggles that button would be useful.
+
+## Todos
 
 Should test charts.
 
