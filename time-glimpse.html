@@ -212,6 +212,11 @@ Expect more glimpses to be added in the future.
       connectedCallback() {
         super.connectedCallback();
         // console.log(window.innerWidth);
+        window.addEventListener("resize", this.resized.bind(this));
+        this.resized();
+      }
+
+      resized() {
         this.set('hostWidth', this.offsetWidth);
         console.log(`hostWidth: ${this.hostWidth}`);
       }
