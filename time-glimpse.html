@@ -194,9 +194,14 @@ Expect more glimpses to be added in the future.
           },          
           report: {
             type: Object,
-          },          
+          },
+
           hostWidth: {
             type: Number,
+          },
+          resizeDebounceTime: {
+            type: Number,
+            value: 600,
           },
           chartMainStyles: {
             type: Object,
@@ -217,8 +222,13 @@ Expect more glimpses to be added in the future.
       }
 
       resized() {
-        this.set('hostWidth', this.offsetWidth);
-        console.log(`hostWidth: ${this.hostWidth}`);
+        setTimeout(() => {
+
+          this.set('hostWidth', this.offsetWidth);
+          console.log(`hostWidth: ${this.hostWidth}`);
+          // Run code here, resizing has "stopped"
+        }, this.resizeDebounceTime);
+
       }
 
       observeCalendarHeight(calendarHeight) {
