@@ -15,6 +15,7 @@
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../time-glimpse.html">
+    <!-- <link rel="import" href="sample-content.html"> -->
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -26,7 +27,8 @@
       <h3>Basic time-glimpse demo</h3>
       <demo-snippet>
         <template>
-          <time-glimpse id="demoEl"></time-glimpse>
+          <!-- <sample-content id="contentEl" datetimes="{{datetimes}}"></sample-content> -->
+          <time-glimpse id="demoEl" datetimes="[[datetimes]]"></time-glimpse>
         </template>
       </demo-snippet>
     </div>
@@ -44,6 +46,8 @@
     // const datetimes = [ "2017-11-29T15:20:00.000Z", "2017-11-29T14:15:00.000Z", "2017-11-29T16:30:00.000Z", "2017-12-02T13:14:59.000Z" ];
     const datetimes = [ "2016-04-11T02:00:00.000Z", "2017-02-12T02:00:00.000Z", "2017-02-20T03:00:00.000Z", "2017-03-11T19:48:59.000Z", "2017-03-23T04:00:00.000Z", "2017-04-02T06:00:00.000Z", "2017-04-09T03:00:00.000Z", "2017-05-28T06:00:00.000Z", "2017-07-01T04:59:59.000Z", "2017-08-16T04:30:00.000Z", "2017-09-03T03:00:00.000Z", "2017-09-10T03:00:00.000Z" ];
     const demoEl = document.getElementById('demoEl');
-    demoEl.datetimes = datetimes;
+    // console.log(`contentEl.datetimes: `, contentEl.datetimes);
+    demoEl.datetimes = datetimes; 
+    // console.log(`demoEl.datetimes: `, demoEl.datetimes);
   </script>
 </html>
