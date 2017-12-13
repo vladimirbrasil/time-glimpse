@@ -8,9 +8,14 @@ On december 3<sup>rd</sup>, 2017.
 
 | Passing       | Not passing   |
 |:------------- |:--------------|
-| Safari      	| Edge 			|
-| Chrome      	| IE      		|
-| Firefox 		|       		|
+| Safari      	| Edge 		      |
+| Chrome      	| IE      		  |
+| Firefox 	  	| Android     	|
+|            		| iOS    	  	  |
+
+> iOS: "date value is not finite in DateTimeFormat format()"
+
+> Android: "expected '17:17' to equal '14:17'"
 
 [Choose browsers to test on sauce](https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/) and add them to  **wct.conf.json**
 
@@ -31,6 +36,22 @@ On december 3<sup>rd</sup>, 2017.
           "browserName": "safari",
           "platform": "OS X 10.11",
           "version": "10.0"
+        },
+        {
+          "browserName": "Safari",
+          "appiumVersion": "1.7.1",
+          "deviceName": "iPhone X Simulator",
+          "deviceOrientation": "portrait",
+          "platformVersion": "11.0",
+          "platformName": "iOS"
+        }, 
+        {
+          "browserName": "Chrome",
+          "appiumVersion": "1.6.4",
+          "deviceName": "Android GoogleAPI Emulator",
+          "deviceOrientation": "portrait",
+          "platformVersion": "7.1",
+          "platformName": "Android"
         }
       ]
 ```
