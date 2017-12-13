@@ -16,11 +16,13 @@ On december 3<sup>rd</sup>, 2017.
 
 **wct.conf.json**
 ```javascript
-      "browsers": [{
+      "browsers": [
+        {
           "browserName": "MicrosoftEdge",
           "platform": "Windows 10",
           "version": ""
-        }, {
+        }, 
+        {
           "browserName": "internet explorer",
           "platform": "Windows 8.1",
           "version": "11.0"
