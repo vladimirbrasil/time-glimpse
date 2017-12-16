@@ -43,6 +43,7 @@ Expect more glimpses to be added in the future.
         display: block;
         @apply --time-glimpse-mixin;
         --time-glimpse-main-color: var(--dark-primary-color, #4286f4);
+        --time-glimpse-main-color-data-variation: var(--time-glimpse-main-color, rgb(66, 134, 244, 0.3));
         --time-glimpse-light-color: var(--light-primary-color, #d6e5ff);
         --paper-tab-ink: var(--time-glimpse-light-color);
         --paper-tabs-selection-bar-color: var(--time-glimpse-main-color);
@@ -241,17 +242,20 @@ Expect more glimpses to be added in the future.
         const chartWidth = (hostWidth > 1200) ? 1200 : Math.round(hostWidth) - 15;
         
         //colors
-        let mainColor, lightMainColor;
+        let mainColor, lightMainColor, mainColorDataVariation;
         if (ShadyCSS) {
           mainColor = ShadyCSS.getComputedStyleValue(this, '--time-glimpse-main-color');
+          mainColorDataVariation = ShadyCSS.getComputedStyleValue(this, '--time-glimpse-main-color-data-variation');
           lightMainColor = ShadyCSS.getComputedStyleValue(this, '--time-glimpse-light-color');
         } else {
           mainColor = getComputedStyle(this).getPropertyValue('--time-glimpse-main-color');
+          mainColorDataVariation = getComputedStyle(this).getPropertyValue('--time-glimpse-main-color-data-variation');
           lightMainColor = getComputedStyle(this).getPropertyValue('--time-glimpse-light-color');
         }
         const dataColor = mainColor; //'#4286f4'; 
+        const dataColorMax = mainColorDataVariation; //'#4286f4'; 
         const lightColor = lightMainColor; //'#d6e5ff';
-        return { chartWidth, dataColor, lightColor };
+        return { chartWidth, dataColor, dataColorMax, lightColor };
       }
 
       computeTimelineData(datetimes) {

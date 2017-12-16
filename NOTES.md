@@ -88,3 +88,15 @@ Should detect what is causing excessive rendering cpu consumption.
 Should change iron-pages if it is really causing excessive rendering cpu consumption.
 Should rely less on google charts if they are causing excessive rendering cpu consumption.
 
+Pode agrupar todos os pontos no mesmo ano e colorir de claro para escuro (botão agrupar)
+Time-glimpse pode aceitar datas e também um objeto:
+```javascript
+{ 
+  correios: 1, 
+   Cef: 0,
+   Veículo: 1,
+   Local: 0,
+   (etc) 
+}
+```
+Permitindo ter filtros por cada item ou ítens do objeto.

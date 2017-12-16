@@ -170,8 +170,8 @@
         const rows = chartRows;
         data.addRows(rows);
 
-        let dataColor, lightColor, chartWidth;
-        ({ dataColor, lightColor, chartWidth } = chartMainStyles);
+        let dataColor, dataColorMax, lightColor, chartWidth;
+        ({ dataColor, dataColorMax, lightColor, chartWidth } = chartMainStyles);
 
         const noDataBackgroundColor = '#fff';
 
@@ -197,7 +197,7 @@
           legend: 'none',
           colorAxis: {
             minValue: 0, 
-            colors: [dataColor, dataColor]
+            colors: [dataColor, dataColorMax]
           },
           noDataPattern: {
             backgroundColor: noDataBackgroundColor,
