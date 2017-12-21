@@ -261,6 +261,7 @@ Expect more glimpses to be added in the future.
       computeTimelineData(datetimes) {
         if (!datetimes || !datetimes[0]) return;
         const timelineData = datetimes
+          .filter(dt => !!dt)
           .map(dt => this._toDateTime(dt))
           .map((dt, index) => {
             // console.log(dt)
