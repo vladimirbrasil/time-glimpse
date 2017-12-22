@@ -124,18 +124,18 @@ Expect more glimpses to be added in the future.
       </paper-slide>
     </l2t-paper-slider> -->
 
-    <!-- <time-glimpse 
+    <!-- <time-glimpse-calc 
       datetimes="[[datetimes]]" 
       timeline-data="{{timelineData}}"
       report="{{report}}"
       no-outliers="{{noOutliers}}"
       chart-main-styles="{{chartMainStyles}}"
-    ></time-glimpse> -->
+    ></time-glimpse-calc> -->
 
-    <!-- <p>report: [[jsonStringify(report)]]</p>
+    <p>report: [[jsonStringify(report)]]</p>
     <p>chartMainStyles: [[jsonStringify(chartMainStyles)]]</p>
     <p>noOutliers: [[jsonStringify(noOutliers)]]</p>
-    <p>timelineData: [[jsonStringify(timelineData)]]</p> -->
+    <p>timelineData: [[jsonStringify(timelineData)]]</p>
 
     <template is="dom-if" if="[[!noOutliers]]">
       <paper-toggle-button id="showOutliersToggle" checked="{{showOutliers}}" disabled="[[noOutliers]]">
@@ -154,7 +154,7 @@ Expect more glimpses to be added in the future.
 
     <iron-pages selected="{{selected}}">
       <div>
-        <chart-calendar on-calendar-redraw="calendarRedraw" on-calendar-height-changed="test" id="chartCalendar" show-outliers="[[showOutliers]]" chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]"
+        <chart-calendar id="chartCalendar" show-outliers="[[showOutliers]]" chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]"
           height="{{calendarHeight}}"></chart-calendar>
       </div>
       <div>
@@ -223,24 +223,6 @@ Expect more glimpses to be added in the future.
           },
         };
       }
-
-      connectedCallback() {
-        super.connectedCallback();
-
-        // this.addEventListener('calendar-height-changed', function(event) {
-        //     alert(event.detail.height);            
-        // });        
-      }
-
-      // test(e) {
-      //   console.log('calendar-height-changed: ', JSON.stringify(e.detail))
-      // }
-      // calendarRedraw(e) {
-      //   alert(JSON.stringify(e.detail))
-      // }
-
-
-
 
       jsonStringify(obj) {
         return JSON.stringify(obj, null, 2);

@@ -1,0 +1,192 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<link rel="import" href="report-el.html">
+<link rel="import" href="annotate-outliers.html">
+
+<dom-module id="time-glimpse-calc">
+  <template>
+    <report-el timeline-data="[[timelineData]]" report="{{report}}"></report-el>
+    <annotate-outliers timeline-data="{{timelineData}}" no-outliers="{{noOutliers}}"></annotate-outliers>
+  </template>
+
+  <script>
+    class TimeGlimpseCalc extends Polymer.Element {
+      static get is() { return 'time-glimpse-calc'; }
+      static get properties() {
+        return {
+          /**
+          * Array of datetimes to be plotted.
+          */
+          datetimes: {
+            type: Array,
+            value: null,
+          },
+          timelineData: {
+            type: Array,
+            computed: 'computeTimelineData(datetimes)',
+            notify: true,
+          },
+          report: {
+            type: Object,
+            notify: true,
+          },
+          noOutliers: {
+            type: Boolean,
+            notify: true,
+          },
+
+          hostWidth: {
+            type: Number,
+          },
+          resizeDebounceTime: {
+            type: Number,
+            value: 600,
+          },
+          chartMainStyles: {
+            type: Object,
+            computed: 'computeChartMainStyles(hostWidth)',
+            notify: true,
+          },
+          calendarHeight: {
+            type: Number,            
+          },
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        // console.log(window.innerWidth);
+        window.addEventListener("resize", this.resized.bind(this));
+        this.resized();
+      }
+
+      resized() {
+        setTimeout(() => {
+
+          this.set('hostWidth', this.offsetWidth);
+          console.log(`hostWidth: ${this.hostWidth}`);
+          // Run code here, resizing has "stopped"
+        }, this.resizeDebounceTime);
+
+      }
+
+      observeCalendarHeight(calendarHeight) {
+        console.log(calendarHeight)
+        this.updateStyles({'--time-glimpse-calc-height': `${calendarHeight}px`});
+      }
+
+      computeChartMainStyles(hostWidth) {
+        // dimensions
+        const chartWidth = (hostWidth > 1200) ? 1200 : Math.round(hostWidth) - 15;
+        
+        //colors
+        let mainColor, lightMainColor, mainColorDataVariation;
+        if (ShadyCSS) {
+          mainColor = ShadyCSS.getComputedStyleValue(this, '--time-glimpse-calc-main-color');
+          mainColorDataVariation = ShadyCSS.getComputedStyleValue(this, '--time-glimpse-calc-main-color-data-variation');
+          lightMainColor = ShadyCSS.getComputedStyleValue(this, '--time-glimpse-calc-light-color');
+        } else {
+          mainColor = getComputedStyle(this).getPropertyValue('--time-glimpse-calc-main-color');
+          mainColorDataVariation = getComputedStyle(this).getPropertyValue('--time-glimpse-calc-main-color-data-variation');
+          lightMainColor = getComputedStyle(this).getPropertyValue('--time-glimpse-calc-light-color');
+        }
+        const dataColor = mainColor; //'#4286f4'; 
+        const dataColorMax = mainColorDataVariation; //'#4286f4'; 
+        const lightColor = lightMainColor; //'#d6e5ff';
+        return { chartWidth, dataColor, dataColorMax, lightColor };
+      }
+
+      computeTimelineData(datetimes) {
+        if (!datetimes || !datetimes[0]) return;
+        const timelineData = datetimes
+          .filter(dt => !!dt)
+          .map(dt => this._toDateTime(dt))
+          .map((dt, index) => {
+            // console.log(dt)
+            const time = this._getTime(dt);
+            const date = this._getDate(dt);
+            return {
+              datetime: dt,
+              weekday: this._getWeekDay(dt),
+              time: {
+                str: time,
+                val: this._timeToNumberScale(time),
+              },
+              date: {
+                str: date,
+                val: this._dateToNumberScale(date),
+              },
+              formattedDate: this._formattedDate(dt),
+            }
+          });
+
+        // console.log(timelineData)  
+        return timelineData;        
+      }
+
+      _timeToNumberScale(time) {
+        var hoursMinutes = time.split(/[.:]/);
+        var hours = parseInt(hoursMinutes[0], 10);
+        var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+        // return parseFloat(`${hours}.${minutes}`);        
+        return hours + minutes / 60;        
+      }
+
+      _dateToNumberScale(strDate) {
+        var date = new Date(strDate);
+        var days = date.getDate();
+        var months = date.getMonth() + 1;
+        var years = date.getFullYear();
+        // console.log(strDate, date, days, months, years)
+        return days / 12 + months + years * 12;        
+      }
+
+      _toDateTime(date) {
+        return new Date(date);
+      }
+
+      _getDate(date) {
+        if (!date) return;
+        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
+        // var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        var options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        const dateFormat = new Intl.DateTimeFormat(window.navigator.language, options);
+        return dateFormat.format(date);        
+      }
+
+      _getTime(date) {
+        return date.toLocaleString('pt-BR').substring(11,16).trim();
+      }
+
+      _getWeekDay(date) {
+        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
+        const weekdayFormat = new Intl.DateTimeFormat(window.navigator.language, { 
+          weekday: 'short', 
+        });
+        return weekdayFormat.format(date).toLocaleLowerCase();
+      }
+
+      _formattedDate(date) {
+        if (!date) return;
+        const lang = window.Intl || 'en';
+        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
+        const textDateFormat = new Intl.DateTimeFormat(lang, { 
+          year: 'numeric',
+          month: 'long', 
+          day: 'numeric', 
+        });
+
+        return textDateFormat.format(date);
+      }
+
+      jsonStringify(obj) {
+        return JSON.stringify(obj, null, 2);
+      }
+
+    }
+
+
+    window.customElements.define(TimeGlimpseCalc.is, TimeGlimpseCalc);
+  </script>
+</dom-module>

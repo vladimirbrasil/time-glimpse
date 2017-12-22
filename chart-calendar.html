@@ -27,6 +27,7 @@
       #chart_div {
         width: 100%;
       }
+
       @media screen and (min-width: 1200px) {
         #chart_div {
           width: 1200px;
@@ -34,7 +35,7 @@
       }
     </style>
 
-    <div id="chart_div"></div>      
+    <div id="chart_div"></div>
 
   </template>
 
@@ -92,9 +93,9 @@
 
         google.charts.load('current', {
           'language': document.documentElement.lang || 'en',
-          'packages': ['calendar'], 
+          'packages': ['calendar'],
         });
-        
+
         google.charts.setOnLoadCallback(() => {
           const chart = new google.visualization.Calendar(this.$.chart_div);
           this.set('chart', chart);
@@ -117,43 +118,43 @@
       computeChartRowsFull(timelineData) {
         if (!timelineData || !timelineData[0]) return;
         // console.log(timelineData);
-        
+
         return timelineData
-        .map((tdata, index) => [ 
-          new Date(tdata.datetime), 
-          tdata.time.val,
-          `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time.str}`
-        ]);
+          .map((tdata, index) => [
+            new Date(tdata.datetime),
+            tdata.time.val,
+            `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time.str}`
+          ]);
       }
 
       computeChartRowsNoOutliers(timelineData) {
         if (!timelineData || !timelineData[0]) return;
 
-        
-         return timelineData
-        .filter(td => !td.isOutlier)
-        // .filter(td => !td.dateValIsOutlier)
-        .map((tdata, index) => [ 
-          new Date(tdata.datetime), 
-          tdata.time.val,
-          `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time.str}`
-        ]);
+
+        return timelineData
+          .filter(td => !td.isOutlier)
+          // .filter(td => !td.dateValIsOutlier)
+          .map((tdata, index) => [
+            new Date(tdata.datetime),
+            tdata.time.val,
+            `${tdata.formattedDate} (${tdata.weekday}) ${tdata.time.str}`
+          ]);
       }
 
       computeChartRows(chartRowsFull, chartRowsNoOutliers, showOutliers) {
-        // console.log(chartRowsFull, chartRowsFull[0], chartRowsNoOutliers)
         if (!chartRowsFull || !chartRowsFull[0] || !chartRowsNoOutliers || !chartRowsNoOutliers[0]) return chartRowsFull;
+        // console.log(chartRowsFull, chartRowsFull[0], chartRowsNoOutliers)
         return showOutliers ? chartRowsFull : chartRowsNoOutliers;
       }
 
       computeYears(timelineData) {
-        if (!timelineData || !timelineData[0]) return;        
+        if (!timelineData || !timelineData[0]) return;
         const years = timelineData.map((tdata) => tdata.datetime.getFullYear());
         // console.log(years);
         const firstYear = Math.min(...years);
         const lastYear = Math.max(...years);
         // console.log(lastYear - firstYear);
-        
+
 
         return 1 + lastYear - firstYear;
       }
@@ -170,13 +171,15 @@
         const rows = chartRows;
         data.addRows(rows);
 
+        // console.log(data)
+
         let dataColor, dataColorMax, lightColor, chartWidth;
         ({ dataColor, dataColorMax, lightColor, chartWidth } = chartMainStyles);
 
         const noDataBackgroundColor = '#fff';
 
         let cellSize, calendarHeight;
-        ({cellSize, calendarHeight} = this.computeChartDimensions(chartWidth));
+        ({ cellSize, calendarHeight } = this.computeChartDimensions(chartWidth));
 
         let options = {
           // title: "Dias da semana",
@@ -193,35 +196,40 @@
           */
           width: chartWidth,
           height: calendarHeight,
-          calendar: { cellSize: cellSize }, 
+          calendar: { cellSize: cellSize },
           legend: 'none',
           colorAxis: {
-            minValue: 0, 
+            minValue: 0,
             colors: [dataColor, dataColorMax]
           },
           noDataPattern: {
             backgroundColor: noDataBackgroundColor,
             color: lightColor,
-          }          
+          }
         };
         // console.log(this.chartMainStyles)
         // console.log(data, options)      
-          
-        chart.draw(data, options);        
-          
+
+        chart.draw(data, options);
+
       }
 
       computeChartDimensions(chartWidth) {
         const calendarWidthAdjustFactor = 0.95;
-        const cellSize = Math.round((calendarWidthAdjustFactor * chartWidth - 20.3)/55.8);
-        const calendarHeightPerYear = (17.9 * cellSize + 29.9)/2;
+        const cellSize = Math.round((calendarWidthAdjustFactor * chartWidth - 20.3) / 55.8);
+        const calendarHeightPerYear = (17.9 * cellSize + 29.9) / 2;
         const calendarHeight = Math.round(1.1 * (this.years * calendarHeightPerYear));
 
         // console.log(calendarHeight);
-        if (calendarHeight > this.height) this.set('height', calendarHeight); //this.updateStyles({'--time-glimpse-height': `${calendarHeight}px`});
-        
+        console.log(`calendarHeight: ${calendarHeight} | this.height: ${this.height}`)
+        // this.dispatchEvent(new CustomEvent('calendar-height-changed', { detail: { height: calendarHeight } }));
+        if (calendarHeight > this.height) {
+          this.set('height', calendarHeight); //this.updateStyles({'--time-glimpse-height': `${calendarHeight}px`});
+          // alert(JSON.stringify({ details: calendarHeight }))
+          // this.dispatchEvent(new CustomEvent('calendar-redraw', { detail: { height: calendarHeight } }));
+        }
 
-        return {cellSize, calendarHeight};
+        return { cellSize, calendarHeight };
       }
 
       userInteraction() {

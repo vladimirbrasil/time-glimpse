@@ -4,218 +4,238 @@
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>time-glimpse test</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../../web-component-tester/browser.js"></script>
+  <title>time-glimpse test</title>
 
-    <link rel="import" href="../time-glimpse.html">
-  </head>
-  <body>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
 
-    <test-fixture id="BasicTestFixture">
-      <template>
-        <time-glimpse></time-glimpse>
-      </template>
-    </test-fixture>
+  <link rel="import" href="../time-glimpse.html">
+</head>
 
-    <script>
-      suite( 'tests', () => {
+<body>
 
-        let element;
+  <test-fixture id="BasicTestFixture">
+    <template>
+      <time-glimpse></time-glimpse>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('tests', () => {
+
+      let element;
+      setup(() => {
+        replace('paper-tabs').with('fake-paper-tabs');
+        replace('paper-tab').with('fake-paper-tab');
+        replace('iron-pages').with('fake-iron-pages');
+        // replace('paper-toggle-button').with('fake-paper-toggle-button');
+        replace('paper-icon-button').with('fake-paper-icon-button');
+        replace('chart-calendar').with('fake-chart-calendar');
+        replace('chart-scatter').with('fake-chart-scatter');
+
+        // replace('chart-scatter-controls').with('fake-chart-scatter-controls');
+        element = fixture('BasicTestFixture');
+      });
+
+      // suite('events', () => {
+      //   setup(() => {
+      //     // element.set('datetimes', { unexpectedKey: 'unexpectedValue' });
+      //     element.style.width = '50px';
+      //     replace('fake-chart-calendar').with('chart-calendar');
+      //   });
+        
+      //   test.only('fires calendar-height-changed event', function(done) {
+          // element.addEventListener('calendar-height-changed', function(event) {
+          //   assert.equal(event.detail.height, newHeight);
+          //   done();
+          // });
+      //     element.style.width = '5000px';
+      //     // element.fireLasers();
+      //   });
+      // });
+
+      suite('wrong parameters', () => {
+
         setup(() => {
-          replace('paper-tabs').with('fake-paper-tabs');
-          replace('paper-tab').with('fake-paper-tab');
-          replace('iron-pages').with('fake-iron-pages');
-          // replace('paper-toggle-button').with('fake-paper-toggle-button');
-          replace('paper-icon-button').with('fake-paper-icon-button');
-          replace('chart-calendar').with('fake-chart-calendar');
-          replace('chart-scatter').with('fake-chart-scatter');
-
-          // replace('chart-scatter-controls').with('fake-chart-scatter-controls');
-          element = fixture('BasicTestFixture');
+          element.set('datetimes', { unexpectedKey: 'unexpectedValue' });
         });
 
-        suite( 'wrong parameters', () => {
-
-          setup( () => {
-            element.set('datetimes', { unexpectedKey: 'unexpectedValue' });
-          });
-      
-          test( 'pass wrongly formatted data behaves properly', () => {
-            assert.equal( element.timelineData, undefined );
-          });
+        test('pass wrongly formatted data behaves properly', () => {
+          assert.equal(element.timelineData, undefined);
         });
+      });
 
-        suite( 'basic funcionality', () => {
-          let firstDate;
+      suite('basic funcionality', () => {
+        let firstDate;
 
-          setup( () => {
-            const datetimes = [
-              '2017-08-11T14:17:00-0300',
-              '2017-08-07T16:00:00-0300',
-              '2017-08-23T15:22:00-0300',
-              '2017-09-01T16:34:00-0300',
-              '2017-08-17T15:22:00-0300',
-              '2017-09-21T17:44:00-0300',
-              '2017-09-13T14:48:00-0300',
-            ];
-            element.set('datetimes', datetimes);
-            firstDate = element.timelineData[0];
-          });
-      
-          test( 'instantiating the element with correct data works', () => {
-            assert.equal  ( element.datetimes[0],  '2017-08-11T14:17:00-0300' );
-          });
-
-          test( 'datetime is correctly passed', () => {
-            // console.log(JSON.stringify(firstDate));
-            const noTimeDate = firstDate.datetime.toString().split('2017')[0].trim();
-            assert.equal  ( `${noTimeDate}`,  'Fri Aug 11' );
-          });
-
-          test( 'weekday is properly calculated',     () => assert.equal  ( `${firstDate.weekday}`      ,  'fri'                 ) );
-          test( 'time string is properly calculated', () => assert.equal  ( `${firstDate.time.str}`     ,  '14:17'               ) );
-          test( 'time value is properly calculated',  () => assert.equal  ( `${firstDate.time.val}`     ,  '14.283333333333333'  ) );
-          test( 'date string is properly calculated', () => assert.equal  ( `${firstDate.date.str}`     ,  '08/11/2017'          ) );
-          test( 'date value is properly calculated',  () => assert.equal  ( `${firstDate.date.val}`     ,  '24212.916666666668'  ) );
-          test( 'formatted date is calculated',       () => assert.equal  ( `${firstDate.formattedDate}`,  'August 11, 2017'     ) );
-
-        });
-
-        suite( 'outliers', () => {
-          let td, expectedDateOutlier, expectedTimeOutlier;
-
-          setup( () => {
-            const datetimes = [ 
-              "2016-02-11T02:00:00.000Z", 
-              "2017-03-11T19:48:59.000Z", 
-              "2017-02-12T02:00:00.000Z", 
-              "2017-02-20T03:00:00.000Z", 
-              "2017-03-23T04:00:00.000Z", 
-              "2017-04-02T06:00:00.000Z", 
-              "2017-04-09T03:00:00.000Z", 
-              "2017-05-28T06:00:00.000Z", 
-              "2017-07-01T04:59:59.000Z", 
-              "2017-08-16T04:30:00.000Z", 
-              "2017-09-03T03:00:00.000Z", 
-              "2017-09-10T03:00:00.000Z" 
-            ];
-
-            element.set('datetimes', datetimes);
-            td = element.timelineData;
-            expectedDateOutlier = td[0]; 
-            expectedTimeOutlier = td[1];
-          });
-
-          test( 'date outliers are annotated', () => assert.equal  ( expectedDateOutlier.isOutlier ,  'date' ) );
-          test( 'time outliers are annotated', () => assert.equal  ( expectedTimeOutlier.isOutlier ,  'time' ) );
-          test( 'no-outliers is properly set to false', () => assert.equal  ( element.noOutliers ,  false ) );
-
-          test( 'should ignore outliers in small datasets', () => {
-            const datetimes = [ 
-              "2016-02-11T02:00:00.000Z", 
-              "2017-03-11T19:48:59.000Z", 
-              "2017-02-12T02:00:00.000Z", 
-            ];
-
-            element.set('datetimes', datetimes);
-            td = element.timelineData;
-            assert.notEqual  ( td[0].isOutlier,  `no outlier` ,  true );
-          });
-
-          test( 'should set no-outliers if there are no outliers', () => {
-            const datetimes = [ 
-            "2017-02-11T02:00:00.000Z", 
-            "2017-03-11T03:48:59.000Z", 
-            "2017-02-12T02:00:00.000Z", 
-            "2017-02-20T03:00:00.000Z", 
-            "2017-03-23T04:00:00.000Z", 
-            "2017-04-02T03:00:00.000Z", 
-            "2017-04-09T03:00:00.000Z", 
-            "2017-04-28T04:00:00.000Z", 
+        setup(() => {
+          const datetimes = [
+            '2017-08-11T14:17:00-0300',
+            '2017-08-07T16:00:00-0300',
+            '2017-08-23T15:22:00-0300',
+            '2017-09-01T16:34:00-0300',
+            '2017-08-17T15:22:00-0300',
+            '2017-09-21T17:44:00-0300',
+            '2017-09-13T14:48:00-0300',
           ];
-
-            element.set('datetimes', datetimes);
-            // console.log(JSON.stringify(element.timelineData))
-            assert.equal  ( element.noOutliers ,  true );
-          });
-
+          element.set('datetimes', datetimes);
+          firstDate = element.timelineData[0];
         });
 
-        a11ySuite('BasicTestFixture');
+        test('instantiating the element with correct data works', () => {
+          assert.equal(element.datetimes[0], '2017-08-11T14:17:00-0300');
+        });
 
-        // suite('calendar chart', () => {
-        //   let element;
-        //   let calendar;
+        test('datetime is correctly passed', () => {
+          // console.log(JSON.stringify(firstDate));
+          const noTimeDate = firstDate.datetime.toString().split('2017')[0].trim();
+          assert.equal(`${noTimeDate}`, 'Fri Aug 11');
+        });
 
-        //   setup(() => {
-        //     // replace('chart-calendar').with('fake-chart-calendar');
-        //     replace('chart-scatter').with('fake-chart-scatter');
-        //     // replace('fake-iron-pages').with('iron-pages');
-
-        //     const datetimes = [
-        //       '2015-08-11T14:17:00-0300',
-        //       '2017-08-07T16:00:00-0300',
-        //       '2017-08-23T15:22:00-0300',
-        //       '2017-09-01T16:34:00-0300',
-        //       '2017-08-17T15:22:00-0300',
-        //       '2017-09-21T17:44:00-0300',
-        //       '2017-09-13T14:48:00-0300',
-        //     ];
-        //     element = fixture('BasicTestFixture');
-        //     element.set('datetimes', datetimes);
-        //     calendar = element.shadowRoot.querySelector('#chartCalendar');
-        //     // console.log(calendar);
-        //     // console.log(JSON.stringify(calendar.chartRows));
-        //   });
-
-        //   test('should fill chartRows property', () => assert.equal( calendar.chartRows.length , 7));
-        //   test('should properly sum years', () => assert.equal( calendar.years , 3));
-
-        // });
-
-        // suite('scatter chart', () => {
-        //   let element;
-        //   let scatter;
-
-        //   setup(() => {
-        //     replace('chart-calendar').with('fake-chart-calendar');
-        //     // replace('chart-scatter').with('fake-chart-scatter');          
-        //     const datetimes = [
-        //       '2015-08-11T14:17:00-0300',
-        //       '2017-08-07T16:00:00-0300',
-        //       '2017-08-23T15:22:00-0300',
-        //       '2017-09-01T16:34:00-0300',
-        //       '2017-08-17T15:22:00-0300',
-        //       '2017-09-21T17:44:00-0300',
-        //       '2017-09-13T14:48:00-0300',
-        //     ];
-        //     element = fixture('BasicTestFixture');
-        //     element.set('datetimes', datetimes);
-        //     scatter = element.shadowRoot.querySelector('#chartScatter');
-        //     // console.log(scatter);
-        //     // console.log(JSON.stringify(scatter.chartRows));
-        //   });
-          
-        //   test('should fill chartRows property', () => assert.equal( scatter.chartRows.length , 7));
-        //   // test.only('should properly sum years', () => {
-        //   //   const toggleOutliers = element.shadowRoot.querySelector('#tabs');
-        //   //   const calendar = element.shadowRoot.querySelector('#chartCalendar');
-        //   //   console.log(scatter)
-        //   //   console.log(calendar)
-        //   //   console.log(toggleOutliers)
-        //   //   // assert.equal( scatter.years , 3)
-        //   // });
-
-        // });
+        test('weekday is properly calculated', () => assert.equal(`${firstDate.weekday}`, 'fri'));
+        test('time string is properly calculated', () => assert.equal(`${firstDate.time.str}`, '14:17'));
+        test('time value is properly calculated', () => assert.equal(`${firstDate.time.val}`, '14.283333333333333'));
+        test('date string is properly calculated', () => assert.equal(`${firstDate.date.str}`, '08/11/2017'));
+        test('date value is properly calculated', () => assert.equal(`${firstDate.date.val}`, '24212.916666666668'));
+        test('formatted date is calculated', () => assert.equal(`${firstDate.formattedDate}`, 'August 11, 2017'));
 
       });
-    </script>
 
-  </body>
+      suite('outliers', () => {
+        let td, expectedDateOutlier, expectedTimeOutlier;
+
+        setup(() => {
+          const datetimes = [
+            "2016-02-11T02:00:00.000Z",
+            "2017-03-11T19:48:59.000Z",
+            "2017-02-12T02:00:00.000Z",
+            "2017-02-20T03:00:00.000Z",
+            "2017-03-23T04:00:00.000Z",
+            "2017-04-02T06:00:00.000Z",
+            "2017-04-09T03:00:00.000Z",
+            "2017-05-28T06:00:00.000Z",
+            "2017-07-01T04:59:59.000Z",
+            "2017-08-16T04:30:00.000Z",
+            "2017-09-03T03:00:00.000Z",
+            "2017-09-10T03:00:00.000Z"
+          ];
+
+          element.set('datetimes', datetimes);
+          td = element.timelineData;
+          expectedDateOutlier = td[0];
+          expectedTimeOutlier = td[1];
+        });
+
+        test('date outliers are annotated', () => assert.equal(expectedDateOutlier.isOutlier, 'date'));
+        test('time outliers are annotated', () => assert.equal(expectedTimeOutlier.isOutlier, 'time'));
+        test('no-outliers is properly set to false', () => assert.equal(element.noOutliers, false));
+
+        test('should ignore outliers in small datasets', () => {
+          const datetimes = [
+            "2016-02-11T02:00:00.000Z",
+            "2017-03-11T19:48:59.000Z",
+            "2017-02-12T02:00:00.000Z",
+          ];
+
+          element.set('datetimes', datetimes);
+          td = element.timelineData;
+          assert.notEqual(td[0].isOutlier, `no outlier`, true);
+        });
+
+        test('should set no-outliers if there are no outliers', () => {
+          const datetimes = [
+            "2017-02-11T02:00:00.000Z",
+            "2017-03-11T03:48:59.000Z",
+            "2017-02-12T02:00:00.000Z",
+            "2017-02-20T03:00:00.000Z",
+            "2017-03-23T04:00:00.000Z",
+            "2017-04-02T03:00:00.000Z",
+            "2017-04-09T03:00:00.000Z",
+            "2017-04-28T04:00:00.000Z",
+          ];
+
+          element.set('datetimes', datetimes);
+          // console.log(JSON.stringify(element.timelineData))
+          assert.equal(element.noOutliers, true);
+        });
+
+      });
+
+      a11ySuite('BasicTestFixture');
+
+      // suite('calendar chart', () => {
+      //   let element;
+      //   let calendar;
+
+      //   setup(() => {
+      //     // replace('chart-calendar').with('fake-chart-calendar');
+      //     replace('chart-scatter').with('fake-chart-scatter');
+      //     // replace('fake-iron-pages').with('iron-pages');
+
+      //     const datetimes = [
+      //       '2015-08-11T14:17:00-0300',
+      //       '2017-08-07T16:00:00-0300',
+      //       '2017-08-23T15:22:00-0300',
+      //       '2017-09-01T16:34:00-0300',
+      //       '2017-08-17T15:22:00-0300',
+      //       '2017-09-21T17:44:00-0300',
+      //       '2017-09-13T14:48:00-0300',
+      //     ];
+      //     element = fixture('BasicTestFixture');
+      //     element.set('datetimes', datetimes);
+      //     calendar = element.shadowRoot.querySelector('#chartCalendar');
+      //     // console.log(calendar);
+      //     // console.log(JSON.stringify(calendar.chartRows));
+      //   });
+
+      //   test('should fill chartRows property', () => assert.equal( calendar.chartRows.length , 7));
+      //   test('should properly sum years', () => assert.equal( calendar.years , 3));
+
+      // });
+
+      // suite('scatter chart', () => {
+      //   let element;
+      //   let scatter;
+
+      //   setup(() => {
+      //     replace('chart-calendar').with('fake-chart-calendar');
+      //     // replace('chart-scatter').with('fake-chart-scatter');          
+      //     const datetimes = [
+      //       '2015-08-11T14:17:00-0300',
+      //       '2017-08-07T16:00:00-0300',
+      //       '2017-08-23T15:22:00-0300',
+      //       '2017-09-01T16:34:00-0300',
+      //       '2017-08-17T15:22:00-0300',
+      //       '2017-09-21T17:44:00-0300',
+      //       '2017-09-13T14:48:00-0300',
+      //     ];
+      //     element = fixture('BasicTestFixture');
+      //     element.set('datetimes', datetimes);
+      //     scatter = element.shadowRoot.querySelector('#chartScatter');
+      //     // console.log(scatter);
+      //     // console.log(JSON.stringify(scatter.chartRows));
+      //   });
+
+      //   test('should fill chartRows property', () => assert.equal( scatter.chartRows.length , 7));
+      //   // test.only('should properly sum years', () => {
+      //   //   const toggleOutliers = element.shadowRoot.querySelector('#tabs');
+      //   //   const calendar = element.shadowRoot.querySelector('#chartCalendar');
+      //   //   console.log(scatter)
+      //   //   console.log(calendar)
+      //   //   console.log(toggleOutliers)
+      //   //   // assert.equal( scatter.years , 3)
+      //   // });
+
+      // });
+
+    });
+  </script>
+
+</body>
+
 </html>
