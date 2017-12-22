@@ -4,7 +4,7 @@
 mixinStyle = (superClass) => class extends superClass {
   constructor() {
     super();
-    this.addEventListener('calendar-height-changed', e => alert(e.detail.height));
+    // this.addEventListener('calendar-height-changed', e => alert(e.detail.height));
   }
 
   static get properties() {
@@ -32,6 +32,22 @@ mixinStyle = (superClass) => class extends superClass {
     // console.log(window.innerWidth);
     window.addEventListener('resize', this.resized.bind(this));
     this.resized();
+
+    const calendar = this.shadowRoot.querySelector('#chartCalendar');
+    if (calendar) calendar.addEventListener('calendar-needs-more-height', this.calendarNeedsMoreHeight);
+  }
+  disconnectedCallback() {
+    window.removeEventListener('resize', this.resized.bind(this));
+    this.removeEventListener('calendar-needs-more-height', this.calendarNeedsMoreHeight);
+    super.disconnectedCallback();
+  }
+  calendarNeedsMoreHeight(e) {
+    this.calendarHeight = e.detail.height;
+    // alert('oi!!! ' + this.calendarHeight + ' | ' + JSON.stringify(e.detail))
+  }
+  observeCalendarHeight(calendarHeight) {
+    // console.log(calendarHeight);
+    this.updateStyles({'--time-glimpse-height': `${calendarHeight}px`});
   }
 
   resized() {
@@ -40,11 +56,6 @@ mixinStyle = (superClass) => class extends superClass {
       console.log(`hostWidth: ${this.hostWidth}`);
       // Run code here, resizing has "stopped"
     }, this.resizeDebounceTime);
-  }
-
-  observeCalendarHeight(calendarHeight) {
-    console.log(calendarHeight);
-    this.updateStyles({'--time-glimpse-height': `${calendarHeight}px`});
   }
 
   computeChartMainStyles(hostWidth) {
@@ -67,5 +78,7 @@ mixinStyle = (superClass) => class extends superClass {
     const lightColor = lightMainColor; // '#d6e5ff';
     return {chartWidth, dataColor, dataColorMax, lightColor};
   }
+
+
 
 };

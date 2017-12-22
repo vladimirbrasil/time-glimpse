@@ -14,7 +14,7 @@
 <script src="mixinReport.js"></script>
 <!-- <link rel="import" href="report-el.html"> -->
 <!-- <link rel="import" href="annotate-outliers.html"> -->
-<link rel="import" href="chart-calendar.html">
+<link rel="import" href="time-glimpse-calendar.html">
 <link rel="import" href="chart-scatter.html">
 <link rel="import" href="chart-scatter-controls.html">
 <link rel="import" href="chart-traditionalscatter.html">
@@ -106,7 +106,7 @@ Expect more glimpses to be added in the future.
 
     <!-- <l2t-paper-slider total-slides="2">
       <paper-slide>
-        <chart-calendar chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]"></chart-calendar>        
+        <time-glimpse-calendar chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]"></time-glimpse-calendar>        
       </paper-slide>
       <paper-slide>
         <chart-scatter-controls expanded="{{expanded}}" fullscreen="{{fullscreen}}"></chart-scatter-controls>
@@ -154,8 +154,8 @@ Expect more glimpses to be added in the future.
 
     <iron-pages selected="{{selected}}">
       <div>
-        <chart-calendar on-calendar-redraw="calendarRedraw" on-calendar-height-changed="test" id="chartCalendar" show-outliers="[[showOutliers]]" chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]"
-          height="{{calendarHeight}}"></chart-calendar>
+        <time-glimpse-calendar id="chartCalendar" show-outliers="[[showOutliers]]" chart-main-styles="[[chartMainStyles]]" timeline-data="[[timelineData]]"
+          height="{{calendarHeight}}"></time-glimpse-calendar>
       </div>
       <div>
         <chart-scatter id="chartScatter" show-outliers="[[showOutliers]]" expanded="[[expanded]]" fullscreen="[[fullscreen]]" chart-main-styles="[[chartMainStyles]]"
@@ -226,18 +226,14 @@ Expect more glimpses to be added in the future.
 
       connectedCallback() {
         super.connectedCallback();
+        
+        // const calendar = this.shadowRoot.querySelector('#chartCalendar');
+        // if (calendar) calendar.addEventListener('calendar-needs-more-height', this.calendarNeedsMoreHeight);
 
         // this.addEventListener('calendar-height-changed', function(event) {
         //     alert(event.detail.height);            
         // });        
       }
-
-      // test(e) {
-      //   console.log('calendar-height-changed: ', JSON.stringify(e.detail))
-      // }
-      // calendarRedraw(e) {
-      //   alert(JSON.stringify(e.detail))
-      // }
 
 
 

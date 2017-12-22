@@ -35,7 +35,7 @@
         replace('iron-pages').with('fake-iron-pages');
         // replace('paper-toggle-button').with('fake-paper-toggle-button');
         replace('paper-icon-button').with('fake-paper-icon-button');
-        replace('chart-calendar').with('fake-chart-calendar');
+        replace('time-glimpse-calendar').with('fake-time-glimpse-calendar');
         replace('chart-scatter').with('fake-chart-scatter');
 
         // replace('chart-scatter-controls').with('fake-chart-scatter-controls');
@@ -44,17 +44,26 @@
 
       // suite('events', () => {
       //   setup(() => {
-      //     // element.set('datetimes', { unexpectedKey: 'unexpectedValue' });
-      //     element.style.width = '50px';
-      //     replace('fake-chart-calendar').with('chart-calendar');
+      //     const datetimes = [
+      //       '2001-08-11T14:17:00-0300',
+      //       '2017-09-13T14:48:00-0300',
+      //     ];
+      //     element.set('datetimes', datetimes);
+      //     // calendar with many years need more height from parent
+
+      //     // assert(myEl.isWaiting, true);
+      //     replace('fake-time-glimpse-calendar').with('time-glimpse-calendar');
       //   });
         
       //   test.only('fires calendar-height-changed event', function(done) {
-          // element.addEventListener('calendar-height-changed', function(event) {
-          //   assert.equal(event.detail.height, newHeight);
-          //   done();
-          // });
-      //     element.style.width = '5000px';
+      //     console.log(element.shadowRoot.querySelector('div'));
+      //     console.log(Polymer.dom(element.root));
+      //     console.log(element.$$('#chartCalendar'));
+      //     element.addEventListener('calendar-height-changed', function(event) {
+      //       assert.equal(event.detail.height, 1000);
+      //       done();
+      //     });
+      //     // element.style.width = '5000px';
       //     // element.fireLasers();
       //   });
       // });
@@ -173,7 +182,7 @@
       //   let calendar;
 
       //   setup(() => {
-      //     // replace('chart-calendar').with('fake-chart-calendar');
+      //     // replace('time-glimpse-calendar').with('fake-time-glimpse-calendar');
       //     replace('chart-scatter').with('fake-chart-scatter');
       //     // replace('fake-iron-pages').with('iron-pages');
 
@@ -203,7 +212,7 @@
       //   let scatter;
 
       //   setup(() => {
-      //     replace('chart-calendar').with('fake-chart-calendar');
+      //     replace('time-glimpse-calendar').with('fake-time-glimpse-calendar');
       //     // replace('chart-scatter').with('fake-chart-scatter');          
       //     const datetimes = [
       //       '2015-08-11T14:17:00-0300',
