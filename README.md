@@ -84,9 +84,10 @@ On december 3<sup>rd</sup>, 2017
 
 | Passing       | Not passing   |
 |:------------- |:--------------|
-| Safari      	| Edge 			|
-| Chrome      	| IE      		|
-| Firefox 		|       		|
+| Safari      	| IE 			|
+| Chrome      	| Android (timezone test-only bug)      		|
+| Firefox 		| iOS (timezone test-only bug)      		|
+| Edge 		|       		|
 
 
 ### Big Thanks
