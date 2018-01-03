@@ -19,6 +19,15 @@ On december 3<sup>rd</sup>, 2017.
 
 [Choose browsers to test on sauce](https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/) and add them to  **wct.conf.json**
 
+**first config**
+
+[WCT with sauce](https://github.com/Polymer/tools/tree/master/travis)
+```
+gem install travis
+travis encrypt SAUCE_USERNAME=yourusername --add
+travis encrypt SAUCE_ACCESS_KEY=youraccesskey --add
+```
+
 **wct.conf.json**
 ```javascript
       "browsers": [
